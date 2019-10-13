@@ -10,6 +10,14 @@ char** allouer_tab_2D(int n, int m){
     return tab2D;
 }
 
+Tile** allouer_tab_2D_tile(int n, int m){
+    Tile** tab2D = malloc(n*sizeof(Tile*));
+    for(int i=0;i<n;i++){
+	tab2D[i] = malloc(m*sizeof(Tile));
+    }
+    return tab2D;
+}
+
 void desallouer_tab_2D(char** tab, int n){
     int i;
     for(i=0;i<n;i++){
@@ -49,6 +57,7 @@ void taille_fichier(const char* nomFichier, int* nbLig, int* nbCol){
 	     }
 	}
     }
+    fclose(file);
 }
 
 char** lire_fichier(const char* nomFichier){
@@ -69,11 +78,13 @@ char** lire_fichier(const char* nomFichier){
 	     {
 	      i++;
 	      j = 0;
+	     }else{
+	 	tab2D[i][j] = c;
+	 	j++;
 	     }
-	 tab2D[i][j] = c;
-	 j++;
 	 }	
     }
+    fclose(file);
     return tab2D;
 }
 
@@ -82,11 +93,17 @@ Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, cons
 	g->donnees = lire_fichier(nomFichier);
 	g->largeur = l;
 	g->hauteur = h;
-	g->tileset = charger_image_transparente(nomTileset, renderer, 0, 255, 255);
 	g->ltile = 32;
 	g->htile = 16;
-	g->xtile = 0;
-	g->ytile = 0;
+	g->tileset = charger_image_transparente(nomTileset, renderer, 0, 255, 255);
+	
+	g->tabTile = allouer_tab_2D_tile(g->largeur, g->hauteur);
+	for(int i=0;i< g->largeur; i++){
+	  for(int j=0; j< g->hauteur-1; j++){
+	    g->tabTile[i][j].x = i;
+	    g->tabTile[i][j].y = j;
+	  }
+	}
 	return g;
 }
 
@@ -96,13 +113,15 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 	for(int i=0; i < g->largeur; i++){
 	    for(int j = g->hauteur-1; j >= 0; j--){
 		
-  	        SrcR.x = 0;
+  	        SrcR.x = (g->donnees[i][j] % 48) * g->ltile;
   	        SrcR.y = 0;
   	        SrcR.w = g->ltile;
   	        SrcR.h = g->htile;
 
-	        DestR.x = ORIGINX + (j * (g->ltile*4) / 2) + (i * (g->ltile*4) / 2);
-                DestR.y = ORIGINY + (i * (g->htile*4) / 2) - (j * (g->htile*4) / 2);
+	        //DestR.x = ORIGINX + (j * (g->ltile*4) / 2) + (i * (g->ltile*4) / 2);
+                //DestR.y = ORIGINY + (i * (g->htile*4) / 2) - (j * (g->htile*4) / 2);
+		DestR.x = -64 + SCREEN_WIDTH/2 + (i-j) * 64;
+		DestR.y = 160 + (i+j) * 32;
                 DestR.w = g->ltile*4;
                 DestR.h = g->htile*4;
 		
@@ -111,6 +130,8 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 	}
 
 }
+
+
 
 
 

@@ -6,6 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "CONST.h"
 #include "grille.c"
+#include "collisions.c"
 
 
 int main(){
@@ -41,16 +42,30 @@ int main(){
   ecran = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED);
 
   
-  //tableau contenant la map
-  Tilemap* grille = initialiser_grille("images/Test.bmp", ecran, "grilles/general.txt", 10, 10) ;
+  //enregistrement contenant la map
+  Tilemap* grille = initialiser_grille("images/Double.bmp", ecran, "grilles/general.txt", 10, 10) ;
 
-  
-  printf("%d", grille->donnees[7][4]);
+  int mouseX, mouseY;
+  SDL_GetGlobalMouseState(&mouseX, &mouseY);
+
+  //transformation des coordonnées cartésiennens en coordonnées grille
+  int mouse_grid_x = (mouseY/grille->htile) + (mouseX/grille->ltile);
+  int mouse_grid_y = -(mouseX/grille->ltile) + (mouseY/grille->htile);
+
   //boucle principale
   while(!terminer)
     {
       SDL_RenderClear(ecran);
       dessiner_grille(ecran, grille);
+      //collisions_mouse_tilemap(grille);
+      
+      SDL_GetMouseState(&mouseX, &mouseY);
+
+      mouseX -= -64 + SCREEN_WIDTH/2;
+      mouseY -= 160;
+      mouse_grid_x = (mouseX/64 + mouseY/32)/2;
+      mouse_grid_y = (mouseY/32 - (mouseX/64))/2;
+      printf("%d,%d\n%d,%d\n", mouseX, mouseY, mouse_grid_x, mouse_grid_y);
       SDL_RenderPresent(ecran);
       
       while (SDL_PollEvent(&evenements))
@@ -70,6 +85,8 @@ int main(){
 	    }
 	}
     }
+  //libération de la grille
+  free(grille);
   // Fermer la police et quitter
   TTF_Quit();
   // Libération de l'écran (renderer)
