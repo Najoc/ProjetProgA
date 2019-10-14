@@ -4,8 +4,6 @@
 typedef struct Tile{
 
 	int x, y;		//coordonnées des tiles/
-
-
 } Tile;
 
 typedef struct Tilemap

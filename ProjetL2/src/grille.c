@@ -118,12 +118,10 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
   	        SrcR.w = g->ltile;
   	        SrcR.h = g->htile;
 
-	        //DestR.x = ORIGINX + (j * (g->ltile*4) / 2) + (i * (g->ltile*4) / 2);
-                //DestR.y = ORIGINY + (i * (g->htile*4) / 2) - (j * (g->htile*4) / 2);
-		DestR.x = -64 + SCREEN_WIDTH/2 + (i-j) * 64;
-		DestR.y = 160 + (i+j) * 32;
-                DestR.w = g->ltile*4;
-                DestR.h = g->htile*4;
+		DestR.x = -(TILE_WIDTH/2) + SCREEN_WIDTH/2 + (i-j) * 64;
+		DestR.y = ORIGINY + (i+j) * 32;
+                DestR.w = TILE_WIDTH;
+                DestR.h = TILE_HEIGHT;
 		
 	        SDL_RenderCopy(renderer, g->tileset, &SrcR, &DestR);
 	    }

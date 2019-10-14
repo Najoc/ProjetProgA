@@ -1,5 +1,3 @@
-
-
 #ifndef CONST_H
 #define CONST_H
 
@@ -7,12 +5,13 @@
 
 #define SCREEN_HEIGHT 960
 
-#define TILE_WIDTH 32*4
+#define TILE_WIDTH 128
 
-#define TILE_HEIGHT 16*4
+#define TILE_HEIGHT 64
 
-#define ORIGINX 0
+#define ORIGINX SCREEN_WIDTH/2
 
-#define ORIGINY SCREEN_HEIGHT/2
+#define ORIGINY 160
+
 
 #endif
