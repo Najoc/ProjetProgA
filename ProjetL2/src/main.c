@@ -7,6 +7,7 @@
 #include "CONST.h"
 #include "grille.c"
 #include "conversion.c"
+#include "sprites.c"
 #include "world.h"
 
 
@@ -47,22 +48,13 @@ int main(){
   
   //enregistrement contenant la map
   world->grille = initialiser_grille("images/Double.bmp", ecran, "grilles/general.txt", 10, 10) ;
-
-  SDL_Texture* dummy = charger_image_transparente("images/dummy2.bmp", ecran, 0,255,255);
-  SDL_Rect SrcR;
-  SDL_Rect DestR;
-  SrcR.x = 0;
-  SrcR.y = 0;
-  SrcR.w = 64;
-  SrcR.h = 128;
-
-  DestR.x = SCREEN_WIDTH/2 - 16;
-  DestR.y = 960/2 + 30;
-  DestR.w = 64;
-  DestR.h = 64;
-
+  //tableau de sprites
+  world->tabSprites = allouer_tab_2D_Sprite(100,50);
+  world->tabSprites[0] = initialiser_sprite(ecran,"images/dummy2.bmp", 0,0,64,128);
   //coordonnées souris
   int mouseX, mouseY;
+
+  
 
   //boucle principale
   while(!terminer)
@@ -71,8 +63,8 @@ int main(){
       dessiner_grille(ecran, world->grille);
       SDL_GetMouseState(&mouseX, &mouseY);
       coord_to_iso(&mouseX, &mouseY);
-      //printf("%d,%d\n", mouseX, mouseY);
-      SDL_RenderCopy(ecran, dummy, &SrcR, &DestR);
+      printf("%d,%d\n", mouseX, mouseY);
+      dessiner_sprite(ecran, world->tabSprites[0]);
       SDL_RenderPresent(ecran);
       
       while (SDL_PollEvent(&evenements))
@@ -81,12 +73,15 @@ int main(){
 	    {
 	    case SDL_QUIT:
 	      terminer = true; break;
+	    case SDL_MOUSEBUTTONUP:
+	      moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
 	    case SDL_KEYDOWN:
 	      switch(evenements.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
 		case SDLK_q:
 		  terminer = true; break;
+
 		  
 		}
 	    }

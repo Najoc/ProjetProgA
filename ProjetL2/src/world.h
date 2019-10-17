@@ -3,6 +3,7 @@
 
 typedef struct world{
     Tilemap* grille;
+    Sprite** tabSprites;
 }World;
 
 #endif
