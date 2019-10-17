@@ -67,6 +67,9 @@ int main(){
       dessiner_sprite(ecran, world->tabSprites[0]);
       SDL_RenderPresent(ecran);
       
+      for(int i=0; i<100; i++){
+	DetruireSprites(world->tabSprites[i]);
+      }
       while (SDL_PollEvent(&evenements))
 	{
 	  switch(evenements.type)
@@ -81,6 +84,8 @@ int main(){
 		case SDLK_ESCAPE:
 		case SDLK_q:
 		  terminer = true; break;
+		case SDLK_n:
+	          world->tabSprites[0]->isDead = 1; break;
 
 		  
 		}
@@ -91,7 +96,8 @@ int main(){
  
 
   //libération de la grille
-  free(world->grille);
+  free(world);
+  world = NULL;
   // Fermer la police et quitter
   TTF_Quit();
   // Libération de l'écran (renderer)
