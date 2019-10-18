@@ -1,7 +1,5 @@
 #include "grille.h"
 
-
-
 char** allouer_tab_2D(int n, int m){
     char** tab2D = malloc(n*sizeof(char*));
     for(int i=0;i<n;i++){
@@ -82,7 +80,7 @@ char** lire_fichier(const char* nomFichier){
 	 	tab2D[i][j] = c;
 	 	j++;
 	     }
-	 }	
+	 }
     }
     fclose(file);
     return tab2D;
@@ -96,7 +94,7 @@ Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, cons
 	g->ltile = 32;
 	g->htile = 16;
 	g->tileset = charger_image_transparente(nomTileset, renderer, 0, 255, 255);
-	
+
 	g->tabTile = allouer_tab_2D_tile(g->largeur, g->hauteur);
 	for(int i=0;i< g->largeur; i++){
 	  for(int j=0; j< g->hauteur-1; j++){
@@ -112,7 +110,7 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 	SDL_Rect DestR;
 	for(int i=0; i < g->largeur; i++){
 	    for(int j = g->hauteur-1; j >= 0; j--){
-		
+
   	        SrcR.x = (g->donnees[i][j] % 48) * g->ltile;
   	        SrcR.y = 0;
   	        SrcR.w = g->ltile;
@@ -122,7 +120,7 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 		DestR.y = ORIGINY + (i+j) * 32;
                 DestR.w = TILE_WIDTH;
                 DestR.h = TILE_HEIGHT;
-		
+
 	        SDL_RenderCopy(renderer, g->tileset, &SrcR, &DestR);
 	    }
 	}

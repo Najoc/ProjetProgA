@@ -1,8 +1,10 @@
 #ifndef FONCTIONS_SDL_H_
 #define FONCTIONS_SDL_H_
 
-
 #include <SDL2/SDL.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include <SDL2/SDL_ttf.h>
 
 extern SDL_Texture* charger_image(const char* nomfichier, SDL_Renderer* renderer);

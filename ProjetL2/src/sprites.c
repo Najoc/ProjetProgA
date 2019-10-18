@@ -1,6 +1,4 @@
 #include "sprites.h"
-#include "grille.h"
-#include "conversion.h"
 
 Sprite** allouer_tab_2D_Sprite(int n, int m){
     Sprite** tab2D = malloc(n*sizeof(Sprite*));
@@ -19,14 +17,14 @@ Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xs
     s->frame = 0;
     s->isDead = 0;
     s->asset = charger_image_transparente(nomFichier, renderer,0, 255, 255);
-    
+
     return s;
 }
 
 void dessiner_sprite(SDL_Renderer* renderer, Sprite* s){
     SDL_Rect SrcR;
     SDL_Rect DestR;
-    
+
     SrcR.x = s->frame * s->width;
     SrcR.y = 0;
     SrcR.w = s->width;
@@ -54,7 +52,7 @@ void moveTo(SDL_Renderer* renderer, Sprite* s, int indexX, int indexY){
 }
 
 void DetruireSprites(Sprite* s){
-    
+
     if(s->isDead == 1){
 	SDL_DestroyTexture(s->asset);
     }

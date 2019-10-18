@@ -5,6 +5,10 @@
 
 #define SCREEN_HEIGHT 960
 
+#define TITLE_WIDTH 800
+
+#define TITLE_HEIGHT 300
+
 #define TILE_WIDTH 128
 
 #define TILE_HEIGHT 64

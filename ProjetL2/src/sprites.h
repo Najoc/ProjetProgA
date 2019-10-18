@@ -1,6 +1,10 @@
 #ifndef SPRITES_H
 #define SPRITES_H
 
+#include "grille.h"
+#include "conversion.h"
+#include "sprites.h"
+
 typedef struct{
     SDL_Texture* asset;
     int x,y;

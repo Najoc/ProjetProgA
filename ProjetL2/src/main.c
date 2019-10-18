@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "fonctions_SDL.c"
+#include "fonctions_SDL.h"
 #include <SDL2/SDL_ttf.h>
 #include "CONST.h"
-#include "grille.c"
-#include "conversion.c"
-#include "sprites.c"
+#include "grille.h"
+#include "conversion.h"
+#include "sprites.h"
 #include "world.h"
+#include "accueil.h"
 
 
 int main(){
-  
+
   SDL_Window* fenetre; //déclaration fenêtre
   SDL_Event evenements; // évènements de la fenpetre
   bool terminer = false;
@@ -45,7 +46,7 @@ int main(){
 
   //initialisation du monde
   World* world = malloc(sizeof(world));
-  
+
   //enregistrement contenant la map
   world->grille = initialiser_grille("images/Double.bmp", ecran, "grilles/general.txt", 10, 10) ;
   //tableau de sprites
@@ -54,22 +55,32 @@ int main(){
   //coordonnées souris
   int mouseX, mouseY;
 
-  
+  //initialisation de l'entier déterminant l'écran à afficher
+  world->screen = 1;
 
   //boucle principale
-  while(!terminer)
-    {
-      SDL_RenderClear(ecran);
-      dessiner_grille(ecran, world->grille);
-      SDL_GetMouseState(&mouseX, &mouseY);
-      coord_to_iso(&mouseX, &mouseY);
-      printf("%d,%d\n", mouseX, mouseY);
-      dessiner_sprite(ecran, world->tabSprites[0]);
-      SDL_RenderPresent(ecran);
-      
-      for(int i=0; i<100; i++){
-	DetruireSprites(world->tabSprites[i]);
-      }
+  while(!terminer) {
+        switch (world->screen) {
+            case 1:
+            SDL_RenderClear(ecran);
+            affichage_accueil(ecran);
+            TextTitre(ecran);
+            screenskip(world, evenements);
+            SDL_RenderPresent(ecran);
+
+            break;
+            case 2:
+            SDL_RenderClear(ecran);
+            dessiner_grille(ecran, world->grille);
+            SDL_GetMouseState(&mouseX, &mouseY);
+            coord_to_iso(&mouseX, &mouseY);
+            printf("%d,%d\n", mouseX, mouseY);
+            dessiner_sprite(ecran, world->tabSprites[0]);
+            SDL_RenderPresent(ecran);
+            for(int i=0; i<100; i++){
+                DetruireSprites(world->tabSprites[i]);
+            }
+        }
       while (SDL_PollEvent(&evenements))
 	{
 	  switch(evenements.type)
@@ -87,13 +98,13 @@ int main(){
 		case SDLK_n:
 	          world->tabSprites[0]->isDead = 1; break;
 
-		  
+
 		}
 	    }
 	}
     }
 
- 
+
 
   //libération de la grille
   free(world);
@@ -102,7 +113,7 @@ int main(){
   TTF_Quit();
   // Libération de l'écran (renderer)
   SDL_DestroyRenderer(ecran);
-  
+
   //Quitter SDL
   SDL_DestroyWindow(fenetre);
   SDL_Quit();

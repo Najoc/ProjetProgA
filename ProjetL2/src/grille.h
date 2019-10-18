@@ -1,6 +1,15 @@
 #ifndef GRILLE_H
 #define GRILLE_H
 
+#include <SDL2/SDL.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "fonctions_SDL.h"
+#include <SDL2/SDL_ttf.h>
+#include "CONST.h"
+#include "conversion.h"
+
 typedef struct Tile{
 
 	int x, y;		//coordonnées des tiles/
@@ -12,8 +21,8 @@ typedef struct Tilemap
 	int largeur, hauteur; //taille de la grille
 	SDL_Texture* tileset;
 	Tile** tabTile;
-	int ltile; 
-	int htile;   //largeur/hauteur des tiles  
+	int ltile;
+	int htile;   //largeur/hauteur des tiles
 } Tilemap;
 
 extern char** allouer_tab_2D(int n, int m);
