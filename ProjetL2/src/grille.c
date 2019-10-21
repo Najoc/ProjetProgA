@@ -91,8 +91,8 @@ Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, cons
 	g->donnees = lire_fichier(nomFichier);
 	g->largeur = l;
 	g->hauteur = h;
-	g->ltile = 32;
-	g->htile = 16;
+	g->ltile = 64;
+	g->htile = 32;
 	g->tileset = charger_image_transparente(nomTileset, renderer, 0, 255, 255);
 
 	g->tabTile = allouer_tab_2D_tile(g->largeur, g->hauteur);

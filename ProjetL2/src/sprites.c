@@ -8,7 +8,7 @@ Sprite** allouer_tab_2D_Sprite(int n, int m){
     return tab2D;
 }
 
-Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xsprite, int ysprite, int widths, int heights){
+Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xsprite, int ysprite, int widths, int heights, int v){
     Sprite* s = malloc(sizeof(Sprite));
     s->x = xsprite;
     s->y = ysprite;
@@ -17,6 +17,8 @@ Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xs
     s->frame = 0;
     s->isDead = 0;
     s->asset = charger_image_transparente(nomFichier, renderer,0, 255, 255);
+    s->vie = v;
+    s->lifebar = initialiser_lifebar();
 
     return s;
 }
