@@ -100,6 +100,7 @@ Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, cons
 	  for(int j=0; j< g->hauteur-1; j++){
 	    g->tabTile[i][j].x = i;
 	    g->tabTile[i][j].y = j;
+	    g->tabTile[i][j].estOccupe = 0;
 	  }
 	}
 	return g;

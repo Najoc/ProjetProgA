@@ -11,7 +11,7 @@
 #include "world.h"
 #include "accueil.h"
 #include "interface.h"
-
+#include "attaque.h"
 
 int main(){
 
@@ -53,10 +53,10 @@ int main(){
 
   //tableau de sprites
   world->tabSprites = allouer_tab_2D_Sprite(100,50);
-  world->tabSprites[0] = initialiser_sprite(ecran,"images/guy.bmp", 0,0,64,128, 100);
-  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,64,128, 100);
-  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,64,128, 100);
-  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,64,128, 100);
+  world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,64,128, 100, 'j');
+  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,64,128, 100, 'j');
+  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,64,128, 100, 'j');
+  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,64,128, 100, 'j');
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -68,6 +68,18 @@ int main(){
 
   //initialisation de l'entier déterminant l'écran à afficher
   world->screen = 1;
+
+  //test attaque
+  Tile* tt = malloc(sizeof(Tile) * 4);
+  tt[0].x = 9;
+  tt[0].y = 0;
+  tt[1].x = 5;
+  tt[1].y = 5;
+  tt[2].x = 4;
+  tt[2].y = 2;
+  tt[3].x = 3;
+  tt[3].y = 7;
+  Attaque* a = initialiser_attaque("images/attaqueTest.bmp", ecran,55, "test", 'e', tt);
 
   //boucle principale
   while(!terminer) {
@@ -87,7 +99,8 @@ int main(){
             SDL_GetMouseState(&mouseX, &mouseY);
             coord_to_iso(&mouseX, &mouseY);
             printf("%d,%d\n", mouseX, mouseY);
-
+	    if(a->draw == 1)
+		dessiner_attaque_sur_tile(a, ecran, 64, 32, 4); 
 	    for(int i = 0; i<4; i++){
                 dessiner_sprite(ecran, world->tabSprites[i]);
 	    }
@@ -103,22 +116,19 @@ int main(){
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
-                moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
+                //moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
                 case SDL_KEYDOWN:
                 switch(evenements.key.keysym.sym) {
                     case SDLK_ESCAPE:
                     case SDLK_q:
                     terminer = true; break;
                     case SDLK_n:
-                    world->tabSprites[0]->vie -= 3;
-                    world->tabSprites[1]->vie -= 3;
-                    world->tabSprites[2]->vie -= 3;
-                    world->tabSprites[3]->vie -= 3; break;
+			for(int i = 0; i<4; i++){
+			    attaquer(world->tabSprites[i], a, world->grille);
+			}
+			break;
                     case SDLK_b:
-                    world->tabSprites[0]->vie += 3;
-                    world->tabSprites[1]->vie += 3;
-                    world->tabSprites[2]->vie += 3;
-                    world->tabSprites[3]->vie += 3; break;
+			 break;
                 }
             }
         }
