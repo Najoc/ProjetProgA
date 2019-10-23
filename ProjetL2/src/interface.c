@@ -33,7 +33,7 @@ void dessiner_lifebar(SDL_Renderer* renderer, SDL_Texture* spritesheet, Sprite* 
     for(int j = temp; j < 19; j++){
 	s->lifebar[j] = 4;
     }
-    
+
     if(nombreUn < 20)
 	s->lifebar[19] = 5;
     if(nombreUn == 0)
@@ -60,13 +60,24 @@ void dessiner_lifebar(SDL_Renderer* renderer, SDL_Texture* spritesheet, Sprite* 
 }
 
 void dessiner_cadre_perso(SDL_Renderer* renderer, SDL_Texture* portrait, SDL_Texture* cadre, SDL_Texture* lifebar, Sprite** tab){
-	
+    //dessin des cadres
+    dessin_cadre(renderer, cadre);
+    dessin_portraits(renderer, portrait);
+
+    //dessin barres de vies
+    for(int i = 0; i<4; i++){
+	int x = (40 + ((i%2)*166));
+	int y = i > 1? SCREEN_HEIGHT - (15*2): SCREEN_HEIGHT - (50*2);
+	dessiner_lifebar(renderer, lifebar, tab[i], x,y);
+    }
+
+}
+
+void dessin_cadre(SDL_Renderer* renderer, SDL_Texture* cadre) {
     SDL_Rect SrcR;
     SDL_Rect DestR;
 
-    //dessin des cadres
     for(int i = 0; i<4; i++){
-
 	SrcR.x = 0;
 	SrcR.y = 0;
 	SrcR.w = 166;
@@ -79,8 +90,12 @@ void dessiner_cadre_perso(SDL_Renderer* renderer, SDL_Texture* portrait, SDL_Tex
 
 	SDL_RenderCopy(renderer, cadre, &SrcR, &DestR);
     }
+}
 
-    //dessin des portraits
+void dessin_portraits(SDL_Renderer* renderer, SDL_Texture* portrait) {
+    SDL_Rect SrcR;
+    SDL_Rect DestR;
+
     for(int i = 0; i<4; i++){
 
 	SrcR.x = i%2 * 32;
@@ -95,18 +110,4 @@ void dessiner_cadre_perso(SDL_Renderer* renderer, SDL_Texture* portrait, SDL_Tex
 
 	SDL_RenderCopy(renderer, portrait, &SrcR, &DestR);
     }
-
-    //dessin barres de vies
-    for(int i = 0; i<4; i++){
-	int x = (40 + ((i%2)*166));
-	int y = i > 1? SCREEN_HEIGHT - (15*2): SCREEN_HEIGHT - (50*2);
-	dessiner_lifebar(renderer, lifebar, tab[i], x,y);
-    }
-
 }
-
-
-
-
-
-

@@ -12,6 +12,7 @@
 
 extern void affichage_accueil (SDL_Renderer* renderer);
 extern void TextTitre (SDL_Renderer* renderer);
+extern void TextJouer (SDL_Renderer* renderer);
 extern void screenskip (World* w, SDL_Event event);
 
 #endif // ACCUEIL_H

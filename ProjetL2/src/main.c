@@ -76,6 +76,7 @@ int main(){
             SDL_RenderClear(ecran);
             affichage_accueil(ecran);
             TextTitre(ecran);
+            TextJouer(ecran);
             screenskip(world, evenements);
             SDL_RenderPresent(ecran);
 
@@ -97,34 +98,30 @@ int main(){
                 DetruireSprites(world->tabSprites[i]);
             }
         }
-      while (SDL_PollEvent(&evenements))
-	{
-	  switch(evenements.type)
-	    {
-	    case SDL_QUIT:
-	      terminer = true; break;
-	    case SDL_MOUSEBUTTONUP:
-	      moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
-	    case SDL_KEYDOWN:
-	      switch(evenements.key.keysym.sym)
-		{
-		case SDLK_ESCAPE:
-		case SDLK_q:
-		  terminer = true; break;
-		case SDLK_n:
-		  world->tabSprites[0]->vie -= 3;
-		  world->tabSprites[1]->vie -= 3;
-		  world->tabSprites[2]->vie -= 3;
-	          world->tabSprites[3]->vie -= 3; break;
-		case SDLK_b:
-		  world->tabSprites[0]->vie += 3;
-		  world->tabSprites[1]->vie += 3;
-		  world->tabSprites[2]->vie += 3;
-	          world->tabSprites[3]->vie += 3; break;
-		
-		}
-	    }
-	}
+        while (SDL_PollEvent(&evenements)) {
+            switch(evenements.type) {
+                case SDL_QUIT:
+                terminer = true; break;
+                case SDL_MOUSEBUTTONUP:
+                moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
+                case SDL_KEYDOWN:
+                switch(evenements.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                    case SDLK_q:
+                    terminer = true; break;
+                    case SDLK_n:
+                    world->tabSprites[0]->vie -= 3;
+                    world->tabSprites[1]->vie -= 3;
+                    world->tabSprites[2]->vie -= 3;
+                    world->tabSprites[3]->vie -= 3; break;
+                    case SDLK_b:
+                    world->tabSprites[0]->vie += 3;
+                    world->tabSprites[1]->vie += 3;
+                    world->tabSprites[2]->vie += 3;
+                    world->tabSprites[3]->vie += 3; break;
+                }
+            }
+        }
     }
 
 
