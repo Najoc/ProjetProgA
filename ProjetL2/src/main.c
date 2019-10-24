@@ -10,7 +10,6 @@
 #include "conversion.h"
 #include "sprites.h"
 #include "world.h"
-#include "accueil.h"
 #include "interface.h"
 #include "attaque.h"
 
@@ -70,6 +69,9 @@ int main(){
   //initialisation de l'entier déterminant l'écran à afficher
   world->screen = 1;
 
+    //initialisation accueil
+  world->accueil = init_accueil(ecran);
+
   //test attaque
   Tile* tt = malloc(sizeof(Tile) * 4);
   tt[0].x = 9;
@@ -89,42 +91,41 @@ int main(){
         switch (world->screen) {
             case 1:
             SDL_RenderClear(ecran);
-            affichage_accueil(ecran);
-            TextTitre(ecran);
-            TextJouer(ecran);
+            affichage_accueil(ecran, world->accueil);
             screenskip(world, evenements);
             SDL_RenderPresent(ecran);
-
             break;
+
             case 2:
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
             SDL_GetMouseState(&mouseX, &mouseY);
             coord_to_iso(&mouseX, &mouseY);
             printf("%d,%d\n", mouseX, mouseY);
-	    
-	    if(a->draw == 1){
-		if(a->currentFrame > 2){
-			delay = 0;
-			a->draw = 0;
-			a->currentFrame = 0;
-		}else{
-		dessiner_attaque_sur_tile(a, ecran, 64, 32, 4);
-		delay += 0.2;
-		a->currentFrame = floor(delay);
-		}
-	    }
-	    for(int i = 0; i<4; i++){
+            if(a->draw == 1) {
+                if(a->currentFrame > 2) {
+                    delay = 0;
+                    a->draw = 0;
+                    a->currentFrame = 0;
+                } else {
+                    dessiner_attaque_sur_tile(a, ecran, 64, 32, 4);
+                    delay += 0.2;
+                    a->currentFrame = floor(delay);
+                }
+            }
+            for(int i = 0; i<4; i++){
                 dessiner_sprite(ecran, world->tabSprites[i]);
-	    }
-
-	    dessiner_cadre_perso(ecran, portrait, cadre, lifebar, world->tabSprites);
+            }
+            dessiner_cadre_perso(ecran, portrait, cadre, lifebar, world->tabSprites);
             SDL_RenderPresent(ecran);
             for(int i=0; i<100; i++){
                 DetruireSprites(world->tabSprites[i]);
-            }
-	    SDL_Delay(17);
+            } break;
+
+            case 3:
+                terminer = true; break;
         }
+        SDL_Delay(17);
         while (SDL_PollEvent(&evenements)) {
             switch(evenements.type) {
                 case SDL_QUIT:
