@@ -7,12 +7,22 @@
 #include <stdbool.h>
 #include "fonctions_SDL.h"
 #include "CONST.h"
-#include "grille.h"
-#include "world.h"
 
-extern void affichage_accueil (SDL_Renderer* renderer);
-extern void TextTitre (SDL_Renderer* renderer);
-extern void TextJouer (SDL_Renderer* renderer);
-extern void screenskip (World* w, SDL_Event event);
+
+typedef struct{
+    SDL_Texture* fond;
+    SDL_Texture* titre;
+    SDL_Texture* jouer;
+    SDL_Texture* quitter;
+
+} Accueil;
+
+
+extern Accueil* init_accueil(SDL_Renderer* renderer);
+
+extern void affichage_accueil (SDL_Renderer* renderer, Accueil* a);
+extern void TextTitre (SDL_Renderer* renderer, SDL_Texture* titre);
+extern void TextJouer (SDL_Renderer* renderer, SDL_Texture* jouer);
+extern void TextQuitter(SDL_Renderer* renderer, SDL_Texture* quitter);
 
 #endif // ACCUEIL_H
