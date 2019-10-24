@@ -45,7 +45,7 @@ void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, 
     SDL_Rect DestR;
 
     for(int i = 0; i < longueurTab; i++){
-    	SrcR.x = a->currentFrame * largeur;
+    	SrcR.x = a->currentFrame%3 * largeur;
     	SrcR.y = 0;
     	SrcR.w = largeur;
     	SrcR.h = hauteur;
@@ -61,7 +61,6 @@ void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, 
 	
 	SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
     }
-    //a->draw = 0;
 }
 
 void effacer_attaque(Attaque* a){

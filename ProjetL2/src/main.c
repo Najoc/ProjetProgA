@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 #include "fonctions_SDL.h"
 #include <SDL2/SDL_ttf.h>
 #include "CONST.h"
@@ -81,6 +82,8 @@ int main(){
   tt[3].y = 7;
   Attaque* a = initialiser_attaque("images/attaqueTest.bmp", ecran,55, "test", 'e', tt);
 
+
+  float delay = 0;
   //boucle principale
   while(!terminer) {
         switch (world->screen) {
@@ -99,8 +102,18 @@ int main(){
             SDL_GetMouseState(&mouseX, &mouseY);
             coord_to_iso(&mouseX, &mouseY);
             printf("%d,%d\n", mouseX, mouseY);
-	    if(a->draw == 1)
-		dessiner_attaque_sur_tile(a, ecran, 64, 32, 4); 
+	    
+	    if(a->draw == 1){
+		if(a->currentFrame > 2){
+			delay = 0;
+			a->draw = 0;
+			a->currentFrame = 0;
+		}else{
+		dessiner_attaque_sur_tile(a, ecran, 64, 32, 4);
+		delay += 0.2;
+		a->currentFrame = floor(delay);
+		}
+	    }
 	    for(int i = 0; i<4; i++){
                 dessiner_sprite(ecran, world->tabSprites[i]);
 	    }
@@ -110,6 +123,7 @@ int main(){
             for(int i=0; i<100; i++){
                 DetruireSprites(world->tabSprites[i]);
             }
+	    SDL_Delay(17);
         }
         while (SDL_PollEvent(&evenements)) {
             switch(evenements.type) {
