@@ -21,8 +21,6 @@ typedef struct{
 extern Accueil* init_accueil(SDL_Renderer* renderer);
 
 extern void affichage_accueil (SDL_Renderer* renderer, Accueil* a);
-extern void TextTitre (SDL_Renderer* renderer, SDL_Texture* titre);
-extern void TextJouer (SDL_Renderer* renderer, SDL_Texture* jouer);
-extern void TextQuitter(SDL_Renderer* renderer, SDL_Texture* quitter);
+extern void renderElement(SDL_Renderer* renderer, SDL_Texture* image, int SrcX, int SrcY, int SrcW, int SrcH, int DestX, int DestY, int DestW, int destH);
 
 #endif // ACCUEIL_H

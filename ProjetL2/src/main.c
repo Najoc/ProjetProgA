@@ -57,6 +57,7 @@ int main(){
   world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,64,128, 100, 'j');
   world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,64,128, 100, 'j');
   world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,64,128, 100, 'j');
+  world->tabSprites[4] = initialiser_sprite(ecran, "images/soldat.bmp", 4, 2, 64, 128, 100, 'e');
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -113,7 +114,7 @@ int main(){
                     a->currentFrame = floor(delay);
                 }
             }
-            for(int i = 0; i<4; i++){
+            for(int i = 0; i<5; i++){
                 dessiner_sprite(ecran, world->tabSprites[i]);
             }
             dessiner_cadre_perso(ecran, portrait, cadre, lifebar, world->tabSprites);
