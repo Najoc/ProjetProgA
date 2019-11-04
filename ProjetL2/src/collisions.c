@@ -1,20 +1,28 @@
 #include "collisions.h"
 #include "grille.h"
 
-void collisions_mouse_tilemap(Tilemap* g){
-	int mouseX, mouseY;
-	SDL_GetMouseState(&mouseX, &mouseY);
+int collisions_point_rect(int pointX,int pointY,int rectX,int rectY,int largeur,int hauteur){
+    if(pointX >= rectX
+    && pointX < rectX + largeur
+    && pointY >= rectY
+    && pointY < rectY + hauteur){
+	return 1;
+    }else{
+	return 0;
+    }
+}
 
-	//transformation des coordonnées cartésiennens en coordonnées grille
-	int mouse_grid_x = (mouseY/(g->htile*4)) + (mouseX/(g->ltile*4));
-	int mouse_grid_y = -(mouseX/(g->ltile*4)) + (mouseY/(g->htile*4));
-	
-	for(int i; i<g->largeur; i++){
-	    for(int j; j < g->hauteur-1; j++){
-	        if((mouse_grid_x == g->tabTile[g->largeur][g->hauteur].x)
-	        && (mouse_grid_y == g->tabTile[g->largeur][g->hauteur].y)){
-		  printf("La souris se situe sur la case (%d,%d)", g->tabTile[g->largeur][g->hauteur].x,g->tabTile[g->largeur][g->hauteur].x);
-	        }
-	    }
-	}
+int collisions_rect_rect(int rectAX,int rectAY,int largeurA,int hauteurA,int rectBX,int rectBY,int largeurB,int hauteurB){
+    if(rectBX >= rectAX + largeurA
+    && rectBX + largeurB <= rectAX
+    && rectBY >= rectAY + hauteurA
+    && rectBY + hauteurB <= rectAY){
+	return 0;
+    }else{
+	return 1;
+    }
+}
+
+int distance_deux_point(int x1, int x2, int y1, int y2){
+    return floor(sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1))));
 }

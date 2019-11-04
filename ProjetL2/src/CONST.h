@@ -31,5 +31,19 @@
 
 #define ORIGINY 160
 
+/**
+*Constantes interface niveau
+*/
 
+#define LIFE_WIDTH 6
+
+#define LIFE_HEIGHT 10
+
+#define CADRE_WIDTH 166
+
+#define CADRE_HEIGHT 35
+
+#define PA_WIDTH 16
+
+#define PA_HEIGHT 16
 #endif

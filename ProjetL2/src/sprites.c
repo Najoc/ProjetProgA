@@ -18,13 +18,15 @@ Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xs
     s->isDead = 0;
     s->asset = charger_image_transparente(nomFichier, renderer,0, 255, 255);
     s->vie = v;
-    s->lifebar = initialiser_lifebar();
+    s->lifebar = initialiser_lifebar(s->vie);
     s->type = type;
+    s->PA = 4;
+    s->jaugePA = initialiser_PA();
 
     return s;
 }
 
-void dessiner_sprite(SDL_Renderer* renderer, Sprite* s){
+void dessiner_sprite(SDL_Renderer* renderer, Sprite* s, int offsetX, int offsetY){
     SDL_Rect SrcR;
     SDL_Rect DestR;
 
@@ -38,19 +40,19 @@ void dessiner_sprite(SDL_Renderer* renderer, Sprite* s){
     renderY = s->y;
     iso_to_coord(&renderX, &renderY);
 
-    DestR.x = renderX - TILE_WIDTH/8 ;
-    DestR.y = renderY - TILE_HEIGHT/2;
-    DestR.w = s->width/2;
-    DestR.h = s->height/2;
+    DestR.x = renderX + offsetX ;
+    DestR.y = renderY + offsetY ;
+    DestR.w = s->width;
+    DestR.h = s->height;
 
     SDL_RenderCopy(renderer, s->asset, &SrcR, &DestR);
 }
 
-void moveTo(SDL_Renderer* renderer, Sprite* s, int indexX, int indexY){
+void moveTo(SDL_Renderer* renderer, Sprite* s, int indexX, int indexY, int offsetX, int offsetY){
     if(indexX >= 0 && indexX <= 9 && indexY >= 0 && indexY <= 9 && s->isDead == 0){
        s->x = indexX;
        s->y = indexY;
-       dessiner_sprite(renderer, s);
+       dessiner_sprite(renderer, s, offsetX, offsetY);
     }
 }
 

@@ -1,15 +1,10 @@
 #ifndef COLLISIONS_H
 #define COLLISIONS_H
 
-#include <SDL2/SDL.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "fonctions_SDL.h"
-#include <SDL2/SDL_ttf.h>
-#include "CONST.h"
-#include "grille.h"
+#include <math.h>
 
-extern void collisions_souris_tilemap();
+extern int collisions_point_rect(int pointX, int pointY,int rectX,int rectY,int largeur,int hauteur);
+extern int collisions_rect_rect(int rectAX,int rectAY,int largeurA,int hauteurA,int rectBX,int rectBY,int largeurB,int hauteurB);
+extern int distance_deux_point(int x1, int x2, int y1, int y2);
 
 #endif

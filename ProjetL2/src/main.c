@@ -49,20 +49,21 @@ int main(){
   World* world = malloc(sizeof(world));
 
   //enregistrement contenant la map
-  world->grille = initialiser_grille("images/caseSheet.bmp", ecran, "grilles/general.txt", 10, 10) ;
+  world->grille = initialiser_grille("images/terre.bmp", ecran, "grilles/general.txt", 10, 10) ;
 
   //tableau de sprites
   world->tabSprites = allouer_tab_2D_Sprite(100,50);
-  world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,64,128, 100, 'j');
-  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,64,128, 100, 'j');
-  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,64,128, 100, 'j');
-  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,64,128, 100, 'j');
-  world->tabSprites[4] = initialiser_sprite(ecran, "images/soldat.bmp", 4, 2, 64, 128, 100, 'e');
+  world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
+  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,32,64, 100, 'j');
+  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,32,64, 100, 'j');
+  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,32,64, 100, 'j');
+  world->tabSprites[4] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
   SDL_Texture* cadre = charger_image_transparente("images/interface/cadre.bmp", ecran, 0, 255, 255);
-  SDL_Texture* portrait = charger_image_transparente("images/portraits.bmp", ecran, 0, 255, 255);
+  SDL_Texture* portrait = charger_image_transparente("images/interface/portraits.bmp", ecran, 0, 255, 255);
+  SDL_Texture* PA = charger_image_transparente("images/interface/PA.bmp", ecran, 0, 255, 255);
 
   //coordonnées souris
   int mouseX, mouseY;
@@ -114,10 +115,12 @@ int main(){
                     a->currentFrame = floor(delay);
                 }
             }
-            for(int i = 0; i<5; i++){
-                dessiner_sprite(ecran, world->tabSprites[i]);
+            for(int i = 0; i<4; i++){
+                dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
-            dessiner_cadre_perso(ecran, portrait, cadre, lifebar, world->tabSprites);
+	    dessiner_sprite(ecran, world->tabSprites[4], -(world->tabSprites[4]->width/2), -(world->tabSprites[4]->height/2 + TILE_HEIGHT));
+
+            dessiner_cadre_perso(ecran, portrait, cadre, lifebar,PA, world->tabSprites);
             SDL_RenderPresent(ecran);
             for(int i=0; i<100; i++){
                 DetruireSprites(world->tabSprites[i]);
@@ -132,7 +135,6 @@ int main(){
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
-                //moveTo(ecran, world->tabSprites[0], mouseX, mouseY); break;
                 case SDL_KEYDOWN:
                 switch(evenements.key.keysym.sym) {
                     case SDLK_ESCAPE:
@@ -144,7 +146,11 @@ int main(){
 			}
 			break;
                     case SDLK_b:
-			 break;
+			world->tabSprites[0]->PA += 1; 
+			world->tabSprites[1]->PA += 2; 
+			world->tabSprites[2]->PA -= 1; 
+			world->tabSprites[3]->PA -= 4; 
+			break;
                 }
             }
         }
