@@ -128,8 +128,29 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 
 }
 
+void dessiner_surbrillance(SDL_Renderer* renderer, SDL_Texture* jaune, int mouseX, int mouseY){
+	SDL_Rect SrcR;
+	SDL_Rect DestR;
 
+	if(mouseX<=9 && mouseX>=0 && mouseY<=9 && mouseY>=0 ){
+	  	SrcR.x = 0;
+	  	SrcR.y = 0;
+	  	SrcR.w = TILE_WIDTH;
+	  	SrcR.h = TILE_HEIGHT;
 
+		int renderX = mouseX;
+		int renderY = mouseY;
+		iso_to_coord(&renderX,&renderY);
+
+		DestR.x = renderX - TILE_WIDTH/2;
+		DestR.y = renderY;
+		DestR.w = TILE_WIDTH;
+		DestR.h = TILE_HEIGHT;
+
+		SDL_RenderCopy(renderer, jaune, &SrcR, &DestR);
+	}
+
+}
 
 
 

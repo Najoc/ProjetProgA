@@ -87,6 +87,8 @@ int main(){
   Attaque* a = initialiser_attaque("images/attaqueTest.bmp", ecran,55, "test", 'e', tt);
 
 
+  SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
+
   float delay = 0;
   //boucle principale
   while(!terminer) {
@@ -103,6 +105,7 @@ int main(){
             dessiner_grille(ecran, world->grille);
             SDL_GetMouseState(&mouseX, &mouseY);
             coord_to_iso(&mouseX, &mouseY);
+	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
             printf("%d,%d\n", mouseX, mouseY);
             if(a->draw == 1) {
                 if(a->currentFrame > 2) {
@@ -129,7 +132,6 @@ int main(){
             case 3:
                 terminer = true; break;
         }
-        SDL_Delay(17);
         while (SDL_PollEvent(&evenements)) {
             switch(evenements.type) {
                 case SDL_QUIT:
