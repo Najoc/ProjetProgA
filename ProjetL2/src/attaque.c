@@ -14,14 +14,14 @@ Attaque* initialiser_attaque(const char* frame, SDL_Renderer* renderer, int dega
     return a;
 }
 
-void attaquer(Sprite* s, Attaque* attaque, Tilemap* t){
+void attaquer(Sprite* s, Attaque* attaque, int taille){
 
     //les attaques ne touche pas les alliés
     attaque->draw = 1;
     if(s->type != attaque->type){
 
 	//parcours de la zone d'attaque
-	for(int i = 0; i<t->largeur; i++){
+	for(int i = 0; i<taille; i++){
 	    
 	    //Si un sprite est dans la zone d'attaque
 	    if((s->x == attaque->zone[i].x) && (s->y == attaque->zone[i].y)){
@@ -64,8 +64,7 @@ void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, 
 }
 
 void effacer_attaque(Attaque* a){
-
-   
+	free(a);
 }
 
 

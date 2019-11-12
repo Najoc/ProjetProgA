@@ -54,16 +54,30 @@ int main(){
   //tableau de sprites
   world->tabSprites = allouer_tab_2D_Sprite(100,50);
   world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
-  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 9,9,32,64, 100, 'j');
-  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 9,0,32,64, 100, 'j');
-  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,5,32,64, 100, 'j');
-  world->tabSprites[4] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
+  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 8,9,32,64, 100, 'j');
+  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 7,0,32,64, 100, 'j');
+  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,6,32,64, 100, 'j');
+  world->tabSprites[4] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 0, 32, 64, 100, 'e');
+  world->tabSprites[5] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 2, 32, 64, 100, 'e');
+  world->tabSprites[6] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 4, 32, 64, 100, 'e');
+  world->tabSprites[7] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 6, 32, 64, 100, 'e');
+  world->tabSprites[8] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 8, 32, 64, 100, 'e');
+  world->tabSprites[9] = initialiser_sprite(ecran, "images/soldat.bmp", 0, -1, 32, 64, 100, 'e');
+  world->tabSprites[10] = initialiser_sprite(ecran, "images/soldat.bmp", 2,-1, 32, 64, 100, 'e');
+  world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 4, -1, 32, 64, 100, 'e');
+  world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 6, -1, 32, 64, 100, 'e');
+  world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 8, -1, 32, 64, 100, 'e');
+  world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
+
+  world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
   SDL_Texture* cadre = charger_image_transparente("images/interface/cadre.bmp", ecran, 0, 255, 255);
   SDL_Texture* portrait = charger_image_transparente("images/interface/portraits.bmp", ecran, 0, 255, 255);
   SDL_Texture* PA = charger_image_transparente("images/interface/PA.bmp", ecran, 0, 255, 255);
+  SDL_Texture* bouton = charger_image_transparente("images/interface/finTour.bmp", ecran, 0, 255, 255);
+  SDL_Texture* comp = charger_image_transparente("images/interface/competence.bmp", ecran, 0, 255, 255);
 
   //coordonnées souris
   int mouseX, mouseY;
@@ -75,23 +89,32 @@ int main(){
   world->accueil = init_accueil(ecran);
 
   //test attaque
-  Tile* tt = malloc(sizeof(Tile) * 4);
-  tt[0].x = 9;
-  tt[0].y = 0;
-  tt[1].x = 5;
-  tt[1].y = 5;
-  tt[2].x = 4;
-  tt[2].y = 2;
-  tt[3].x = 3;
-  tt[3].y = 7;
+  int k = 0;
+  int h = 50;
+  Tile* tt = malloc(sizeof(Tile) * 100);
+  for(int i = 0; i<10; i++){
+    for(int j = 0; j < 10; j+=2){
+	tt[k].x = j;
+	tt[k].y = i;
+	tt[h].x = i;
+	tt[h].y = j;
+	++k; ++h;
+    }
+  }
   Attaque* a = initialiser_attaque("images/attaqueTest.bmp", ecran,55, "test", 'e', tt);
 
 
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
 
   float delay = 0;
+  int compdraw = -1;
+  int noPA = 0;
   //boucle principale
   while(!terminer) {
+	SDL_GetMouseState(&mouseX, &mouseY);
+	int mousecoordX = mouseX;
+	int mousecoordY = mouseY;
+        coord_to_iso(&mouseX, &mouseY);
         switch (world->screen) {
             case 1:
             SDL_RenderClear(ecran);
@@ -103,27 +126,30 @@ int main(){
             case 2:
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
-            SDL_GetMouseState(&mouseX, &mouseY);
-            coord_to_iso(&mouseX, &mouseY);
+
+	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
             printf("%d,%d\n", mouseX, mouseY);
+
             if(a->draw == 1) {
                 if(a->currentFrame > 2) {
                     delay = 0;
                     a->draw = 0;
                     a->currentFrame = 0;
                 } else {
-                    dessiner_attaque_sur_tile(a, ecran, 64, 32, 4);
+                    dessiner_attaque_sur_tile(a, ecran, 64, 32, 100);
                     delay += 0.2;
                     a->currentFrame = floor(delay);
                 }
             }
-            for(int i = 0; i<4; i++){
+            for(int i = 0; i<15; i++){
                 dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
-	    dessiner_sprite(ecran, world->tabSprites[4], -(world->tabSprites[4]->width/2), -(world->tabSprites[4]->height/2 + TILE_HEIGHT));
+	    dessiner_sprite(ecran, world->tabSprites[15], -(world->tabSprites[15]->width/2), -(world->tabSprites[15]->height/2 + TILE_HEIGHT));
 
-            dessiner_cadre_perso(ecran, portrait, cadre, lifebar,PA, world->tabSprites);
+	    dessin_competence_cadre(ecran, comp, mousecoordX, mousecoordY, compdraw, noPA);
+
+            dessin_interface_niveau(ecran, portrait, cadre, lifebar,PA, bouton, mousecoordX, mousecoordY, world->tabSprites);
             SDL_RenderPresent(ecran);
             for(int i=0; i<100; i++){
                 DetruireSprites(world->tabSprites[i]);
@@ -137,6 +163,12 @@ int main(){
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
+		    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
+		    if(compdraw >= 0){
+		        if(world->tabSprites[compdraw]->PA < 2)
+			    noPA = 1;
+		    }
+		    break;
                 case SDL_KEYDOWN:
                 switch(evenements.key.keysym.sym) {
                     case SDLK_ESCAPE:
@@ -144,14 +176,14 @@ int main(){
                     terminer = true; break;
                     case SDLK_n:
 			for(int i = 0; i<4; i++){
-			    attaquer(world->tabSprites[i], a, world->grille);
+			    attaquer(world->tabSprites[i], a, 100);
 			}
 			break;
                     case SDLK_b:
-			world->tabSprites[0]->PA += 1; 
-			world->tabSprites[1]->PA += 2; 
+			world->tabSprites[0]->PA -= 1; 
+			world->tabSprites[1]->PA -= 1; 
 			world->tabSprites[2]->PA -= 1; 
-			world->tabSprites[3]->PA -= 4; 
+			world->tabSprites[3]->PA -= 1; 
 			break;
                 }
             }

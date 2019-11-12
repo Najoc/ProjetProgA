@@ -46,4 +46,6 @@
 #define PA_WIDTH 16
 
 #define PA_HEIGHT 16
+
+#define COMP_HEIGHT 30
 #endif

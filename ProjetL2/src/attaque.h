@@ -19,7 +19,7 @@ typedef struct attaque{
 }Attaque;
 
 extern Attaque* initialiser_attaque(const char* frame, SDL_Renderer* renderer, int degat, char* nom, char type, Tile* tabTile);
-extern void attaquer(Sprite* s, Attaque* attaque, Tilemap* t);
+extern void attaquer(Sprite* s, Attaque* attaque, int taille);
 extern void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, int hauteur, int longueurTab);
 extern void effacer_attaque(Attaque* a);
 

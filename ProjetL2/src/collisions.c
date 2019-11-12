@@ -26,3 +26,16 @@ int collisions_rect_rect(int rectAX,int rectAY,int largeurA,int hauteurA,int rec
 int distance_deux_point(int x1, int x2, int y1, int y2){
     return floor(sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1))));
 }
+
+int collisions_cadre_perso(int mouseX, int mouseY){
+    int originY = SCREEN_HEIGHT - CADRE_HEIGHT*4;
+    if(collisions_point_rect(mouseX, mouseY, 0, originY, CADRE_WIDTH*2, CADRE_HEIGHT*2))
+	return 0;
+    if(collisions_point_rect(mouseX, mouseY, CADRE_WIDTH*2, originY, CADRE_WIDTH*2, CADRE_HEIGHT*2))
+	return 1;
+    if(collisions_point_rect(mouseX, mouseY, 0, originY+(CADRE_HEIGHT*2), CADRE_WIDTH*2, CADRE_HEIGHT*2))
+	return 2;
+    if(collisions_point_rect(mouseX, mouseY, CADRE_WIDTH*2, originY+(CADRE_HEIGHT*2), CADRE_WIDTH*2, CADRE_HEIGHT*2))
+	return 3;
+    return -1;
+}
