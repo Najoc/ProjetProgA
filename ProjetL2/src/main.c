@@ -112,6 +112,7 @@ int main(){
   float delay = 0;
   int compdraw = -1;
   int noPA = 0;
+  int draw_surb=0;
   //boucle principale
   while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -132,9 +133,11 @@ int main(){
 
 	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
-	    dessiner_comp_sur_tile(world->tabSprites[3]->comp, ecran, 9);
+	    if(draw_surb == 1){
+	        dessiner_comp_sur_tile(world->tabSprites[3]->comp, ecran, 8, mouseX, mouseY);
+	    }
             printf("%d,%d\n", mouseX, mouseY);
-
+	    printf("%d\n", compdraw);
             if(a->draw == 1) {
                 if(a->currentFrame > 2) {
                     delay = 0;
@@ -167,10 +170,25 @@ int main(){
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
+		    if(draw_surb == 1 && collisions_competence(mouseX, mouseY, world->tabSprites[3], 8)){
+			moveTo(ecran ,world->tabSprites[3], mouseX, mouseY,  -TILE_WIDTH/8, -TILE_HEIGHT/2);
+			world->tabSprites[3]->PA -= 2;
+			draw_surb = 0;
+			free(world->tabSprites[3]->comp);
+			world->tabSprites[3]->comp = ajouter_comp_liz(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran);
+
+		    }
+		    if(compdraw >= 0){
+		        if((noPA != 1) && collisions_cadre_competence(mousecoordX, mousecoordY))
+			    draw_surb = 1;
+		    }
 		    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
 		    if(compdraw >= 0){
-		        if(world->tabSprites[compdraw]->PA < 2)
+		        if(world->tabSprites[compdraw]->PA < 2){
 			    noPA = 1;
+			}else{
+			    noPA = 0;
+			}
 		    }
 		    break;
                 case SDL_KEYDOWN:
@@ -184,10 +202,7 @@ int main(){
 			}
 			break;
                     case SDLK_b:
-			world->tabSprites[0]->PA -= 1; 
-			world->tabSprites[1]->PA -= 1; 
-			world->tabSprites[2]->PA -= 1; 
-			world->tabSprites[3]->PA -= 1; 
+			world->tabSprites[3]->PA += 1; 
 			break;
                 }
             }
