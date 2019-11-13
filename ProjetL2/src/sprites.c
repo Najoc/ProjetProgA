@@ -9,6 +9,7 @@ Sprite** allouer_tab_2D_Sprite(int n, int m){
 }
 
 Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xsprite, int ysprite, int widths, int heights, int v, char type){
+
     Sprite* s = malloc(sizeof(Sprite));
     s->x = xsprite;
     s->y = ysprite;
@@ -22,7 +23,6 @@ Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xs
     s->type = type;
     s->PA = 4;
     s->jaugePA = initialiser_PA();
-
     return s;
 }
 

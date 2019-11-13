@@ -12,6 +12,7 @@
 #include "world.h"
 #include "interface.h"
 #include "attaque.h"
+#include "competence.h"
 
 int main(){
 
@@ -50,7 +51,7 @@ int main(){
 
   //enregistrement contenant la map
   world->grille = initialiser_grille("images/terre.bmp", ecran, "grilles/general.txt", 10, 10) ;
-
+  
   //tableau de sprites
   world->tabSprites = allouer_tab_2D_Sprite(100,50);
   world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
@@ -68,8 +69,10 @@ int main(){
   world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 6, -1, 32, 64, 100, 'e');
   world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 8, -1, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
-
   world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
+
+  //competences
+  world->tabSprites[3]->comp = ajouter_comp_liz(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran);
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -129,6 +132,7 @@ int main(){
 
 	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
+	    dessiner_comp_sur_tile(world->tabSprites[3]->comp, ecran, 9);
             printf("%d,%d\n", mouseX, mouseY);
 
             if(a->draw == 1) {

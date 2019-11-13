@@ -135,8 +135,8 @@ void dessiner_surbrillance(SDL_Renderer* renderer, SDL_Texture* jaune, int mouse
 	if(mouseX<=9 && mouseX>=0 && mouseY<=9 && mouseY>=0 ){
 	  	SrcR.x = 0;
 	  	SrcR.y = 0;
-	  	SrcR.w = TILE_WIDTH;
-	  	SrcR.h = TILE_HEIGHT;
+	  	SrcR.w = TILE_WIDTH/2;
+	  	SrcR.h = TILE_HEIGHT/2;
 
 		int renderX = mouseX;
 		int renderY = mouseY;

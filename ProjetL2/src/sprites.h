@@ -3,7 +3,7 @@
 
 #include "grille.h"
 #include "conversion.h"
-#include "sprites.h"
+#include "competence.h"
 
 typedef struct{
     SDL_Texture* asset;
@@ -16,6 +16,7 @@ typedef struct{
     int PA;
     int* jaugePA;
     char type;
+    Competence* comp;
     
 }Sprite;
 
