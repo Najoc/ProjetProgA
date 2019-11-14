@@ -72,7 +72,10 @@ int main(){
   world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
 
   //competences
-  world->tabSprites[3]->comp = ajouter_comp_liz(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran);
+  world->tabSprites[0]->comp = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
+  world->tabSprites[1]->comp = ajouter_comp_deplacement(world->tabSprites[1]->x, world->tabSprites[1]->y, ecran, 1);
+  world->tabSprites[2]->comp = ajouter_comp_deplacement(world->tabSprites[2]->x, world->tabSprites[2]->y, ecran, 2);
+  world->tabSprites[3]->comp = ajouter_comp_deplacement(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran, 3);
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -113,6 +116,7 @@ int main(){
   int compdraw = -1;
   int noPA = 0;
   int draw_surb=0;
+  int perso = -1;
   //boucle principale
   while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -134,9 +138,9 @@ int main(){
 	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
 	    if(draw_surb == 1){
-	        dessiner_comp_sur_tile(world->tabSprites[3]->comp, ecran, 8, mouseX, mouseY);
+	        dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 8, mouseX, mouseY);
 	    }
-            printf("%d,%d\n", mouseX, mouseY);
+            //printf("%d,%d\n", mouseX, mouseY);
 	    printf("%d\n", compdraw);
             if(a->draw == 1) {
                 if(a->currentFrame > 2) {
@@ -170,17 +174,14 @@ int main(){
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
-		    if(draw_surb == 1 && collisions_competence(mouseX, mouseY, world->tabSprites[3], 8)){
-			moveTo(ecran ,world->tabSprites[3], mouseX, mouseY,  -TILE_WIDTH/8, -TILE_HEIGHT/2);
-			world->tabSprites[3]->PA -= 2;
-			draw_surb = 0;
-			free(world->tabSprites[3]->comp);
-			world->tabSprites[3]->comp = ajouter_comp_liz(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran);
-
-		    }
 		    if(compdraw >= 0){
+			perso = compdraw;
 		        if((noPA != 1) && collisions_cadre_competence(mousecoordX, mousecoordY))
 			    draw_surb = 1;
+		    }
+		    if(draw_surb == 1 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 8)){
+			gestion_competence_deplacement(ecran, world->tabSprites[perso], mouseX,mouseY,-TILE_WIDTH/8,-TILE_HEIGHT/2, perso);
+			draw_surb = 0;
 		    }
 		    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
 		    if(compdraw >= 0){
@@ -202,7 +203,7 @@ int main(){
 			}
 			break;
                     case SDLK_b:
-			world->tabSprites[3]->PA += 1; 
+			world->tabSprites[1]->PA = 6; 
 			break;
                 }
             }

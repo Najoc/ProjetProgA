@@ -62,3 +62,10 @@ void DetruireSprites(Sprite* s){
 	SDL_DestroyTexture(s->asset);
     }
 }
+
+void gestion_competence_deplacement(SDL_Renderer* renderer, Sprite* s, int mouseX, int mouseY, int offsetX, int offsetY, int choix){
+    moveTo(renderer, s, mouseX, mouseY,  offsetX, offsetY);
+    s->PA -= 2;
+    free(s->comp);
+    s->comp = ajouter_comp_deplacement(s->x, s->y, renderer, choix);
+}

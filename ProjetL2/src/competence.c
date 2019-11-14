@@ -8,19 +8,55 @@ Competence* initialiser_competence(Tile* tab, char ch, SDL_Renderer* renderer){
     return c;
 }
 
-Competence* ajouter_comp_liz(int spriteX, int spriteY, SDL_Renderer* renderer){ 
+Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* renderer, int perso){
     Tile* t = malloc(sizeof(Tile)*8);
-    int k = 0;
-    for(int i=0; i<3; i+=2){
-	for(int j=0; j<3; j++){
-	    t[k].x = (spriteX-1) +i;
-	    t[k].y = (spriteY-1) +j;
-	    ++k;
-	}
+    Competence* c;
+    int k;
+    switch(perso) {
+	case 0:
+        t[0].x = spriteX - 2; t[0].y = spriteY;
+        t[1].x = spriteX - 1; t[1].y = spriteY;
+        t[2].x = spriteX + 1; t[2].y = spriteY;
+        t[3].x = spriteX + 2; t[3].y = spriteY;
+        t[4].x = spriteX; t[4].y = spriteY - 2;
+        t[5].x = spriteX; t[5].y = spriteY - 1;
+        t[6].x = spriteX; t[6].y = spriteY + 1;
+        t[7].x = spriteX; t[7].y = spriteY + 2;
+	break;
+
+        case 1:
+	free(t);
+	t = malloc(sizeof(Tile)*4);
+        t[0].x = spriteX - 1; t[0].y = spriteY;
+        t[1].x = spriteX + 1; t[1].y = spriteY;
+        t[2].x = spriteX; t[2].y = spriteY - 1;
+        t[3].x = spriteX; t[3].y = spriteY + 1;
+	break;
+
+	case 2:
+        t[0].x = spriteX - 1; t[0].y = spriteY - 1;
+        t[1].x = spriteX - 1; t[1].y = spriteY + 1;
+        t[2].x = spriteX - 2; t[2].y = spriteY - 2;
+        t[3].x = spriteX - 2; t[3].y = spriteY + 2;
+        t[4].x = spriteX + 1; t[4].y = spriteY - 1;
+        t[5].x = spriteX + 1; t[5].y = spriteY + 1;
+        t[6].x = spriteX + 2; t[6].y = spriteY - 2;
+        t[7].x = spriteX + 2; t[7].y = spriteY + 2;
+	break;
+
+        case 3:
+        k = 0;
+        for(int i=0; i<3; i+=2){
+	    for(int j=0; j<3; j++){
+	        t[k].x = (spriteX-1) +i;
+	        t[k].y = (spriteY-1) +j;
+	        ++k;
+	    }
+        }
+        t[6].x = spriteX; t[6].y = spriteY-1;
+        t[7].x = spriteX; t[7].y = spriteY+1;
     }
-    t[6].x = spriteX; t[6].y = spriteY-1;
-    t[7].x = spriteX; t[7].y = spriteY+1;
-    Competence* c = initialiser_competence(t, 'd', renderer);
+    c = initialiser_competence(t, 'd', renderer);
     return c;
 }
 

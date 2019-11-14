@@ -217,29 +217,28 @@ void dessin_competence_cadre(SDL_Renderer* renderer, SDL_Texture* comp, int mous
    DestR2.w = CADRE_WIDTH;
    DestR2.h = COMP_HEIGHT;
 
-   int personnage = compdraw;
    int offSet = 0;
    int offSet2 = 0;
-   if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h) && !noPA)
+   if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h) && !noPA && (compdraw>=0))
 	offSet = 4*COMP_HEIGHT;
    if(noPA){
-	if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h))
+	if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h) && (compdraw>=0))
 	    offSet = 8*COMP_HEIGHT;
    }
-   if(collisions_point_rect(mouseX, mouseY,DestR2.x, DestR2.y, DestR2.w, DestR2.h) && !noPA)
+   if(collisions_point_rect(mouseX, mouseY,DestR2.x, DestR2.y, DestR2.w, DestR2.h) && !noPA && (compdraw>=0))
 	offSet2 = 4*COMP_HEIGHT;
    if(noPA){
-	if(collisions_point_rect(mouseX, mouseY,DestR2.x, DestR2.y, DestR2.w, DestR2.h))
+	if(collisions_point_rect(mouseX, mouseY,DestR2.x, DestR2.y, DestR2.w, DestR2.h) && (compdraw>=0))
 	    offSet2 = 8*COMP_HEIGHT;
    }
 
    SrcR.x = 0;
-   SrcR.y = 0 + (personnage * COMP_HEIGHT)+ offSet;
+   SrcR.y = 0 + (compdraw * COMP_HEIGHT) + offSet;
    SrcR.w = CADRE_WIDTH;
    SrcR.h = COMP_HEIGHT;
 
    SrcR2.x = CADRE_WIDTH;
-   SrcR2.y = 0 + (personnage * COMP_HEIGHT)+ offSet2;
+   SrcR2.y = 0 + (compdraw * COMP_HEIGHT) + offSet2;
    SrcR2.w = CADRE_WIDTH;
    SrcR2.h = COMP_HEIGHT;
 

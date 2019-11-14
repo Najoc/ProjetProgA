@@ -25,6 +25,7 @@ extern Sprite* initialiser_sprite(SDL_Renderer* renderer, const char* nomFichier
 extern void dessiner_sprite(SDL_Renderer* renderer, Sprite* s, int offsetX, int offsetY);
 extern void moveTo(SDL_Renderer* renderer, Sprite* s, int indexX, int indexY, int offsetX, int offsetY);
 extern void DetruireSprites(Sprite* s);
+extern void gestion_competence_deplacement(SDL_Renderer* renderer, Sprite* s, int mouseX, int mouseY, int offsetX, int offsetY, int choix);
 
 #include "interface.h"
 
