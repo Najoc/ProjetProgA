@@ -9,11 +9,12 @@ Competence* initialiser_competence(Tile* tab, char ch, SDL_Renderer* renderer){
 }
 
 Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* renderer, int perso){
-    Tile* t = malloc(sizeof(Tile)*8);
+    Tile* t;
     Competence* c;
     int k;
     switch(perso) {
 	case 0:
+	t = malloc(sizeof(Tile)*8);
         t[0].x = spriteX - 2; t[0].y = spriteY;
         t[1].x = spriteX - 1; t[1].y = spriteY;
         t[2].x = spriteX + 1; t[2].y = spriteY;
@@ -25,7 +26,6 @@ Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* ren
 	break;
 
         case 1:
-	free(t);
 	t = malloc(sizeof(Tile)*4);
         t[0].x = spriteX - 1; t[0].y = spriteY;
         t[1].x = spriteX + 1; t[1].y = spriteY;
@@ -34,6 +34,7 @@ Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* ren
 	break;
 
 	case 2:
+	t = malloc(sizeof(Tile)*8);
         t[0].x = spriteX - 1; t[0].y = spriteY - 1;
         t[1].x = spriteX - 1; t[1].y = spriteY + 1;
         t[2].x = spriteX - 2; t[2].y = spriteY - 2;
@@ -45,6 +46,7 @@ Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* ren
 	break;
 
         case 3:
+	t = malloc(sizeof(Tile)*8);
         k = 0;
         for(int i=0; i<3; i+=2){
 	    for(int j=0; j<3; j++){

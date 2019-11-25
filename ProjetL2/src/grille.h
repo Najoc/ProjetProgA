@@ -14,6 +14,7 @@ typedef struct Tile{
 
 	int x, y;		//coordonnées des tiles/
 	int estOccupe;
+	int degats;
 } Tile;
 
 typedef struct Tilemap

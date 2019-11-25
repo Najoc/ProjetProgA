@@ -9,12 +9,15 @@
 #include "grille.h"
 #include "sprites.h"
 #include "accueil.h"
+#include "enemy.h"
 
 typedef struct world{
     Tilemap* grille;
     Sprite** tabSprites;
+    Enemy* tabEnemy;
     Accueil* accueil;
     int screen;
+
 }World;
 
 void screenskip(World* w, SDL_Event event) {

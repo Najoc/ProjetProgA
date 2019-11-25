@@ -1,23 +1,24 @@
 #include "attaque.h"
 
-Attaque* initialiser_attaque(const char* frame, SDL_Renderer* renderer, int degat, char* nom, char type, Tile* tabTile){
+Attaque* initialiser_attaque(const char* frame, SDL_Renderer* renderer, char* nom, char type, int mono, Tile* tabTile, int taille, int largeur, int hauteur){
 
     Attaque* a = malloc(sizeof(Attaque));
     a->Frame = charger_image_transparente(frame, renderer, 0, 255, 255);
-    a->degats = degat;
     a->nom = nom;
     a->type = type;
+    a->mono = mono;
     a->zone = tabTile;
     a->currentFrame = 0;
     a->draw = 0;
-
+    a->tailletab = taille;
+    a->largeurImage = largeur;
+    a->hauteurImage = hauteur;
     return a;
 }
 
 void attaquer(Sprite* s, Attaque* attaque, int taille){
 
     //les attaques ne touche pas les alliés
-    attaque->draw = 1;
     if(s->type != attaque->type){
 
 	//parcours de la zone d'attaque
@@ -27,17 +28,17 @@ void attaquer(Sprite* s, Attaque* attaque, int taille){
 	    if((s->x == attaque->zone[i].x) && (s->y == attaque->zone[i].y)){
 
 		//calcul de dégâts
-		if((s->vie - attaque->degats < 0)){
+		if((s->vie - attaque->zone[i].degats < 0)){
 		     s->vie = 0;
 		}else{
-		     s->vie -= attaque->degats;
+		     s->vie -= attaque->zone[i].degats;
 		
 	        }
 	    }
         }
     }
 
-}  
+}
 
 void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, int hauteur, int longueurTab){
 
@@ -61,6 +62,24 @@ void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, 
 	
 	SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
     }
+}
+
+void dessiner_attaque_sur_sprite(Attaque* a, SDL_Renderer* renderer, Sprite* s, int largeur, int hauteur){
+
+    SDL_Rect SrcR;
+    SDL_Rect DestR;
+
+    SrcR.x = a->currentFrame%3 * largeur;
+    SrcR.y = 0;
+    SrcR.w = largeur;
+    SrcR.h = hauteur;
+
+    DestR.x = s->x;
+    DestR.y = s->y - s->height/2;
+    DestR.w = TILE_WIDTH;
+    DestR.h = TILE_HEIGHT;
+	
+    SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
 }
 
 void effacer_attaque(Attaque* a){

@@ -71,6 +71,15 @@ int main(){
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
   world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
 
+  //ennemi
+  Tile* area = malloc(sizeof(Tile)*10);
+  for(int i = 0; i < 10; i++){
+    area[i].x = 4; area[i].y = i; area[i].degats = 10;
+  }
+  Attaque* testAtk = initialiser_attaque("images/attaqueTest.bmp", ecran, "test", 'e', 0, area, 10, TILE_WIDTH, TILE_HEIGHT);
+  Enemy* boss = initialiser_enemy(world->tabSprites[15], testAtk, 1); 
+  
+
   //competences
   world->tabSprites[0]->comp = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
   world->tabSprites[1]->comp = ajouter_comp_deplacement(world->tabSprites[1]->x, world->tabSprites[1]->y, ecran, 1);
@@ -94,29 +103,13 @@ int main(){
     //initialisation accueil
   world->accueil = init_accueil(ecran);
 
-  //test attaque
-  int k = 0;
-  int h = 50;
-  Tile* tt = malloc(sizeof(Tile) * 100);
-  for(int i = 0; i<10; i++){
-    for(int j = 0; j < 10; j+=2){
-	tt[k].x = j;
-	tt[k].y = i;
-	tt[h].x = i;
-	tt[h].y = j;
-	++k; ++h;
-    }
-  }
-  Attaque* a = initialiser_attaque("images/attaqueTest.bmp", ecran,55, "test", 'e', tt);
-
-
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
 
-  float delay = 0;
   int compdraw = -1;
   int noPA = 0;
   int draw_surb=0;
   int perso = -1;
+  int draw = 0;
   //boucle principale
   while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -138,21 +131,16 @@ int main(){
 	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
 	    if(draw_surb == 1){
-	        dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 8, mouseX, mouseY);
+		if(perso == 1){
+	            dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 4, mouseX, mouseY);
+		}else{
+		     dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 8, mouseX, mouseY);
+		}
 	    }
-            //printf("%d,%d\n", mouseX, mouseY);
-	    printf("%d\n", compdraw);
-            if(a->draw == 1) {
-                if(a->currentFrame > 2) {
-                    delay = 0;
-                    a->draw = 0;
-                    a->currentFrame = 0;
-                } else {
-                    dessiner_attaque_sur_tile(a, ecran, 64, 32, 100);
-                    delay += 0.2;
-                    a->currentFrame = floor(delay);
-                }
-            }
+	    if(draw) 
+		dessiner_attaque_sur_tile(testAtk, ecran, TILE_WIDTH/2, TILE_HEIGHT/2, 10);
+            printf("%d,%d\n", mouseX, mouseY);
+	    //printf("%d\n", compdraw);
             for(int i = 0; i<15; i++){
                 dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
@@ -198,9 +186,10 @@ int main(){
                     case SDLK_q:
                     terminer = true; break;
                     case SDLK_n:
-			for(int i = 0; i<4; i++){
-			    attaquer(world->tabSprites[i], a, 100);
-			}
+			boss->pattern = 0;
+			jouer_pattern(boss, ecran, world->tabSprites, 0);
+			draw = 1;
+			printf("attaque");
 			break;
                     case SDLK_b:
 			world->tabSprites[1]->PA = 6; 
@@ -215,6 +204,7 @@ int main(){
   //libération de la grille
   free(world);
   world = NULL;
+
   // Fermer la police et quitter
   TTF_Quit();
   // Libération de l'écran (renderer)
