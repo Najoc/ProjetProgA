@@ -48,7 +48,7 @@ void aff_TTF(SDL_Renderer* renderer) {
     text_surface = TTF_RenderText_Solid(police,"Hello World!",color);
 
     SDL_Texture *hey = SDL_CreateTextureFromSurface(renderer, text_surface);
-    SDL_Rect hey_position = {0,0,150,400};
+    SDL_Rect hey_position = {0,0,100,50};
     SDL_RenderCopy(renderer, hey, NULL, &hey_position);
 
     SDL_FreeSurface(text_surface);
