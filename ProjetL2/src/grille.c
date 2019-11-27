@@ -46,10 +46,10 @@ void taille_fichier(const char* nomFichier, int* nbLig, int* nbCol){
 	temp++;
 	     if(c == '\n')
 	     {
-	     *nbCol = *nbCol + 1;
-	     	if(temp > *nbLig)
+	     *nbLig = *nbLig + 1;
+	     	if(temp > *nbCol)
 		{
-		    *nbLig = temp;
+		    *nbCol = temp - 1;
 		}
 	     temp = 0;
 	     }
@@ -65,7 +65,7 @@ char** lire_fichier(const char* nomFichier){
     char** tab2D = allouer_tab_2D(lig,col);
 
     FILE* file = fopen(nomFichier, "r");
-    int c;
+    char c;
     int i = 0;
     int j = 0;
     if(file != NULL)
@@ -74,10 +74,12 @@ char** lire_fichier(const char* nomFichier){
 	 {
 	     if(c == '\n')
 	     {
-	      i++;
-	      j = 0;
+	      	i++;
+	      	j = 0;
+//	      	printf("\n");
 	     }else{
 	 	tab2D[i][j] = c;
+//		printf("%c", tab2D[i][j]);
 	 	j++;
 	     }
 	 }
@@ -96,11 +98,12 @@ Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, cons
 	g->tileset = charger_image_transparente(nomTileset, renderer, 0, 255, 255);
 
 	g->tabTile = allouer_tab_2D_tile(g->largeur, g->hauteur);
-	for(int i=0;i< g->largeur; i++){
-	  for(int j=0; j< g->hauteur-1; j++){
+	for(int i=0; i< g->largeur; i++){
+	  for(int j=0; j< g->hauteur; j++){
 	    g->tabTile[i][j].x = i;
 	    g->tabTile[i][j].y = j;
 	    g->tabTile[i][j].estOccupe = 0;
+	    g->tabTile[i][j].degats = 0;
 	  }
 	}
 	return g;
@@ -110,7 +113,7 @@ void dessiner_grille(SDL_Renderer* renderer, Tilemap* g){
 	SDL_Rect SrcR;
 	SDL_Rect DestR;
 	for(int i=0; i < g->largeur; i++){
-	    for(int j = g->hauteur-1; j >= 0; j--){
+	    for(int j=0; j < g->hauteur; j++){
 
   	        SrcR.x = (g->donnees[i][j] % 48) * g->ltile;
   	        SrcR.y = 0;

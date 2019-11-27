@@ -80,11 +80,14 @@ int main(){
   Enemy* boss = initialiser_enemy(world->tabSprites[15], testAtk, 1); 
   
 
+
+
   //competences
   world->tabSprites[0]->comp = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
   world->tabSprites[1]->comp = ajouter_comp_deplacement(world->tabSprites[1]->x, world->tabSprites[1]->y, ecran, 1);
   world->tabSprites[2]->comp = ajouter_comp_deplacement(world->tabSprites[2]->x, world->tabSprites[2]->y, ecran, 2);
   world->tabSprites[3]->comp = ajouter_comp_deplacement(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran, 3);
+
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -98,9 +101,9 @@ int main(){
   int mouseX, mouseY;
 
   //initialisation de l'entier déterminant l'écran à afficher
-  world->screen = 1;
+  int screen = 1;
 
-    //initialisation accueil
+  //initialisation accueil
   world->accueil = init_accueil(ecran);
 
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
@@ -110,17 +113,18 @@ int main(){
   int draw_surb=0;
   int perso = -1;
   int draw = 0;
+
   //boucle principale
   while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
 	int mousecoordX = mouseX;
 	int mousecoordY = mouseY;
         coord_to_iso(&mouseX, &mouseY);
-        switch (world->screen) {
+        switch (screen) {
             case 1:
             SDL_RenderClear(ecran);
             affichage_accueil(ecran, world->accueil);
-            screenskip(world, evenements);
+            screen = screenskip( evenements);
             SDL_RenderPresent(ecran);
             break;
 
@@ -128,7 +132,6 @@ int main(){
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
 
-	    
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
 	    if(draw_surb == 1){
 		if(perso == 1){
