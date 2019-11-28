@@ -1,25 +1,38 @@
 #include "enemy.h"
 
-Enemy* initialiser_enemy(Sprite* s, Attaque* a, int taille){
+Attaque** allouer_tab_2D_atk(int n){
+    Attaque** tab2D = malloc(n*sizeof(Attaque*));
+    for(int i=0;i<n;i++){
+	tab2D[i] = malloc(sizeof(Attaque));
+    }
+    return tab2D;
+}
+
+Enemy* initialiser_enemy(Sprite* s, int nombre_pattern){
     Enemy* e = malloc(sizeof(Enemy));
+    e->atk = allouer_tab_2D_atk(nombre_pattern);
+    e->nbrPattern = nombre_pattern;
     e->sp = s;
-    e->atk = a;
-    e->tailleAtk = taille;
     e->pattern = -1;
 
     return e;
 }
 
-void jouer_pattern(Enemy* e, SDL_Renderer* renderer, Sprite** tab, int cible){
+void ajouter_pattern(Enemy* e, Attaque* a, int index){
+    //on ajoute uniquement s'il reste de la place dans le tableau
+    if(e->nbrPattern > index){
+    	e->atk[index] = a;
+    }
+}
 
-    if(e->atk[e->pattern].mono){
-	attaquer(tab[cible], &e->atk[e->pattern], e->atk[e->pattern].tailletab);
-	dessiner_attaque_sur_sprite(&e->atk[e->pattern], renderer, tab[cible], e->atk[e->pattern].largeurImage ,e->atk[e->pattern].hauteurImage);
+void jouer_pattern(Enemy* e, Sprite** tab, int cible){
+
+    if(e->atk[e->pattern][0].mono){
+	attaquer(tab[cible], e->atk[e->pattern], e->atk[e->pattern][0].tailletab);
     }else{
         for(int i=0; i < 4; i++){
-	    attaquer(tab[i], &e->atk[e->pattern], e->atk[e->pattern].tailletab);
+	    attaquer(tab[i], e->atk[e->pattern], e->atk[e->pattern][0].tailletab);
 	}
-	dessiner_attaque_sur_tile(&e->atk[e->pattern], renderer,e->atk[e->pattern].largeurImage ,e->atk[e->pattern].hauteurImage, e->atk[e->pattern].tailletab);
     }
 }
  

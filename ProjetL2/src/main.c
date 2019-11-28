@@ -13,6 +13,8 @@
 #include "interface.h"
 #include "attaque.h"
 #include "competence.h"
+#include "enemy.h"
+#include "pattern_init.h"
 
 int main(){
 
@@ -63,24 +65,31 @@ int main(){
   world->tabSprites[6] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 4, 32, 64, 100, 'e');
   world->tabSprites[7] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 6, 32, 64, 100, 'e');
   world->tabSprites[8] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 8, 32, 64, 100, 'e');
-  world->tabSprites[9] = initialiser_sprite(ecran, "images/soldat.bmp", 0, -1, 32, 64, 100, 'e');
-  world->tabSprites[10] = initialiser_sprite(ecran, "images/soldat.bmp", 2,-1, 32, 64, 100, 'e');
-  world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 4, -1, 32, 64, 100, 'e');
-  world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 6, -1, 32, 64, 100, 'e');
-  world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 8, -1, 32, 64, 100, 'e');
+  world->tabSprites[9] = initialiser_sprite(ecran, "images/soldat.bmp", 1, -1, 32, 64, 100, 'e');
+  world->tabSprites[10] = initialiser_sprite(ecran, "images/soldat.bmp", 3,-1, 32, 64, 100, 'e');
+  world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 5, -1, 32, 64, 100, 'e');
+  world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 7, -1, 32, 64, 100, 'e');
+  world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, -1, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
   world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
 
   //ennemi
-  Tile* area = malloc(sizeof(Tile)*10);
-  for(int i = 0; i < 10; i++){
-    area[i].x = 4; area[i].y = i; area[i].degats = 10;
-  }
-  Attaque* testAtk = initialiser_attaque("images/attaqueTest.bmp", ecran, "test", 'e', 0, area, 10, TILE_WIDTH, TILE_HEIGHT);
-  Enemy* boss = initialiser_enemy(world->tabSprites[15], testAtk, 1); 
-  
+  Enemy* boss = initialiser_enemy(world->tabSprites[15], 10);
+  Attaque* tir_soldat2 = tir_soldat_2(ecran);
+  Attaque* tir_soldat6 = tir_soldat_6(ecran);
+  Attaque* tir_soldat10 = tir_soldat_10(ecran);
+  Attaque* mineN = proximiteN(ecran);
+  Attaque* mineS = proximiteS(ecran);
+  Attaque* mineE = proximiteE(ecran);
+  Attaque* mineO = proximiteO(ecran);
 
-
+  ajouter_pattern(boss, tir_soldat2, 0);
+  ajouter_pattern(boss, tir_soldat6, 1);
+  ajouter_pattern(boss, tir_soldat10, 2);
+  ajouter_pattern(boss, mineN, 3);
+  ajouter_pattern(boss, mineS, 4);
+  ajouter_pattern(boss, mineE, 5);
+  ajouter_pattern(boss, mineO, 6);
 
   //competences
   world->tabSprites[0]->comp = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
@@ -141,9 +150,8 @@ int main(){
 		}
 	    }
 	    if(draw) 
-		dessiner_attaque_sur_tile(testAtk, ecran, TILE_WIDTH/2, TILE_HEIGHT/2, 10);
+		dessiner_attaque_sur_tile(boss->atk[boss->pattern], ecran, TILE_WIDTH/2, TILE_HEIGHT/2, boss->atk[boss->pattern]->tailletab);
             printf("%d,%d\n", mouseX, mouseY);
-	    //printf("%d\n", compdraw);
             for(int i = 0; i<15; i++){
                 dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
@@ -189,10 +197,9 @@ int main(){
                     case SDLK_q:
                     terminer = true; break;
                     case SDLK_n:
-			boss->pattern = 0;
-			jouer_pattern(boss, ecran, world->tabSprites, 0);
+			boss->pattern = 6;
+			jouer_pattern(boss, world->tabSprites, 0);
 			draw = 1;
-			printf("attaque");
 			break;
                     case SDLK_b:
 			world->tabSprites[1]->PA = 6; 

@@ -7,13 +7,15 @@
 typedef struct enemy{
 
     Sprite* sp;
-    Attaque* atk;
-    int tailleAtk;
+    Attaque** atk;
+    int nbrPattern;
     int pattern;
     
 }Enemy;
 
-extern Enemy* initialiser_enemy(Sprite* sp, Attaque* a, int taille);
-extern void jouer_pattern(Enemy* e, SDL_Renderer* renderer, Sprite** tab, int cible);
+extern Attaque** allouer_tab_2D_atk(int n);
+extern Enemy* initialiser_enemy(Sprite* sp, int nombre_pattern);
+extern void ajouter_pattern(Enemy* e, Attaque* a, int index);
+extern void jouer_pattern(Enemy* e, Sprite** tab, int cible);
 
 #endif //ENEMY_H
