@@ -13,7 +13,7 @@ Enemy* initialiser_enemy(Sprite* s, int nombre_pattern){
     e->atk = allouer_tab_2D_atk(nombre_pattern);
     e->nbrPattern = nombre_pattern;
     e->sp = s;
-    e->pattern = -1;
+    e->pattern = 0;
 
     return e;
 }
@@ -35,4 +35,17 @@ void jouer_pattern(Enemy* e, Sprite** tab, int cible){
 	}
     }
 }
- 
+
+void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
+    if(mouseX >= s->comp[1]->zonePossible[0].x && mouseY >= s->comp[1]->zonePossible[0].y && mouseX <= s->comp[1]->zonePossible[24].x && mouseY <= s->comp[1]->zonePossible[24].x){
+	printf("hey");
+	if(e->sp->x == mouseX && e->sp->y == mouseY){
+	    if(e->sp->vie - 500 < 0){
+		e->sp->vie = 0;
+	    }else{
+		e->sp->vie -= 500;
+	    }
+	    s->PA -= 2;
+	}
+    }
+}

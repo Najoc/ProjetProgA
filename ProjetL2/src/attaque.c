@@ -40,28 +40,29 @@ void attaquer(Sprite* s, Attaque* attaque, int taille){
 
 }
 
-void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int largeur, int hauteur, int longueurTab){
+void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int taille){
 
     SDL_Rect SrcR;
     SDL_Rect DestR;
 
-    for(int i = 0; i < longueurTab; i++){
-    	SrcR.x = a->currentFrame%3 * largeur;
-    	SrcR.y = 0;
-    	SrcR.w = largeur;
-    	SrcR.h = hauteur;
+    for(int j = 0; j < taille; j++){
+	SrcR.x = a->currentFrame%3 * TILE_WIDTH/2;
+	SrcR.y = 0;
+	SrcR.w = TILE_WIDTH/2;
+	SrcR.h = TILE_HEIGHT/2;
 
-	int RenderXatk = a->zone[i].x;
-	int RenderYatk = a->zone[i].y;
-    	iso_to_coord(&RenderXatk, &RenderYatk);
+	int RenderXatk = a->zone[j].x;
+	int RenderYatk = a->zone[j].y;
+	iso_to_coord(&RenderXatk, &RenderYatk);
 
-    	DestR.x = RenderXatk - TILE_WIDTH/2;
-    	DestR.y = RenderYatk;
-    	DestR.w = TILE_WIDTH;
-    	DestR.h = TILE_HEIGHT;
-	
+	DestR.x = RenderXatk - TILE_WIDTH/2;
+	DestR.y = RenderYatk;
+	DestR.w = TILE_WIDTH;
+	DestR.h = TILE_HEIGHT;
+		
 	SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
     }
+    a->currentFrame++;
 }
 
 void dessiner_attaque_sur_sprite(Attaque* a, SDL_Renderer* renderer, Sprite* s, int largeur, int hauteur){
@@ -81,6 +82,8 @@ void dessiner_attaque_sur_sprite(Attaque* a, SDL_Renderer* renderer, Sprite* s, 
 	
     SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
 }
+
+
 
 void effacer_attaque(Attaque* a){
 	free(a);

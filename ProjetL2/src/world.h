@@ -10,28 +10,14 @@
 #include "sprites.h"
 #include "accueil.h"
 #include "enemy.h"
+#include "fin.h"
 
 typedef struct world{
     Tilemap* grille;
     Sprite** tabSprites;
     Enemy* tabEnemy;
     Accueil* accueil;
-
+    Ecran_fin* fin;
 }World;
-
-int screenskip(SDL_Event event) {
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-    //condition chaangement écran
-    if (mouseX > 490 && mouseX < 490+PLAY_WIDTH && mouseY > 450 && mouseY < 450+PLAY_HEIGHT) {
-        if (event.type == SDL_MOUSEBUTTONUP)
-        return 2;
-    }
-    if (mouseX > 440 && mouseX < 440+QUIT_WIDTH && mouseY > 550 && mouseY < 550+QUIT_HEIGHT) {
-        if (event.type == SDL_MOUSEBUTTONUP)
-        return 3;
-    }
-    return 1;
-}
 
 #endif

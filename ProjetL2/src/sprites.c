@@ -23,6 +23,7 @@ Sprite* initialiser_sprite(SDL_Renderer* renderer,const char* nomFichier, int xs
     s->type = type;
     s->PA = 4;
     s->jaugePA = initialiser_PA();
+    s->comp = allouer_tab2D_competence();
     return s;
 }
 
@@ -66,6 +67,19 @@ void DetruireSprites(Sprite* s){
 void gestion_competence_deplacement(SDL_Renderer* renderer, Sprite* s, int mouseX, int mouseY, int offsetX, int offsetY, int choix){
     moveTo(renderer, s, mouseX, mouseY,  offsetX, offsetY);
     s->PA -= 2;
-    free(s->comp);
-    s->comp = ajouter_comp_deplacement(s->x, s->y, renderer, choix);
+    free(s->comp[0]);
+    free(s->comp[1]);
+    s->comp[0] = ajouter_comp_deplacement(s->x, s->y, renderer, choix);
+    s->comp[1] = ajouter_competence_attaque(s->x, s->y, renderer);
 }
+
+
+
+
+
+
+
+
+
+
+

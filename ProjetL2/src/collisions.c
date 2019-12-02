@@ -47,10 +47,17 @@ int collisions_cadre_competence(int mouseX, int mouseY){
     return 0;
 }
 
-int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur){
+int collisions_cadre_competence_attaque(int mouseX, int mouseY){
+    int originY = SCREEN_HEIGHT - 4*(CADRE_HEIGHT) - COMP_HEIGHT;
+    if(collisions_point_rect(mouseX,mouseY, CADRE_WIDTH, originY, CADRE_WIDTH, COMP_HEIGHT))
+		return 1;
+    return 0;
+}
+
+int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur, int numero_competence){
 	for(int i=0; i<longueur; i++){
 		if(mouseX >= 0 && mouseX <= 9 && mouseY >= 0 && mouseY <= 9){
-			if(mouseX == s->comp->zonePossible[i].x && mouseY == s->comp->zonePossible[i].y)
+			if(mouseX == s->comp[numero_competence]->zonePossible[i].x && mouseY == s->comp[numero_competence]->zonePossible[i].y)
 				return 1;
 		}
     }

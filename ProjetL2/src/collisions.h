@@ -9,6 +9,7 @@ extern int collisions_rect_rect(int rectAX,int rectAY,int largeurA,int hauteurA,
 extern int distance_deux_point(int x1, int x2, int y1, int y2);
 extern int collisions_cadre_perso(int mouseX, int mouseY);
 extern int collisions_cadre_competence(int mouseX, int mouseY);
-extern int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur);
+extern int collisions_cadre_competence_attaque(int mouseX, int mouseY);
+extern int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur, int numero_competence);
 
 #endif //COLLISIONS_H

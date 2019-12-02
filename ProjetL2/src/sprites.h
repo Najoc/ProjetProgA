@@ -16,7 +16,7 @@ typedef struct{
     int PA;
     int* jaugePA;
     char type;
-    Competence* comp;
+    Competence** comp;
     
 }Sprite;
 

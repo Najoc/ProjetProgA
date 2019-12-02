@@ -4,7 +4,6 @@
 #define SCREEN_WIDTH 1280
 
 #define SCREEN_HEIGHT 960
-
 /**
  *Constantes de l'accueil
  */
@@ -16,9 +15,13 @@
 
 #define PLAY_HEIGHT 60
 
-#define QUIT_WIDTH 400
+#define QUIT_WIDTH 210
 
-#define QUIT_HEIGHT 60
+#define QUIT_HEIGHT 30
+
+#define YOUWIN_WIDTH 200
+
+#define YOUWIN_HEIGHT 60
 
 /**
  *Constantes grille
@@ -48,4 +51,12 @@
 #define PA_HEIGHT 16
 
 #define COMP_HEIGHT 30
+
+#define FIN_TOUR_WIDTH 200
+
+#define FIN_TOUR_HEIGHT 100
+
+#define FIN_TOUR_X (SCREEN_WIDTH - FIN_TOUR_WIDTH) 
+
+#define FIN_TOUR_Y (SCREEN_HEIGHT - FIN_TOUR_HEIGHT) 
 #endif

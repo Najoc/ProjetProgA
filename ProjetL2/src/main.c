@@ -15,6 +15,23 @@
 #include "competence.h"
 #include "enemy.h"
 #include "pattern_init.h"
+#include "tour.h"
+#include "fin.h"
+
+int screenskip(SDL_Event event) {
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+    //condition chaangement écran
+    if (mouseX > 490 && mouseX < 490+PLAY_WIDTH && mouseY > 450 && mouseY < 450+PLAY_HEIGHT) {
+        if (event.type == SDL_MOUSEBUTTONUP)
+        return 2;
+    }
+    if (mouseX > 440 && mouseX < 440+QUIT_WIDTH && mouseY > 550 && mouseY < 550+QUIT_HEIGHT) {
+        if (event.type == SDL_MOUSEBUTTONUP)
+        return 3;
+    }
+    return 1;
+}
 
 int main(){
 
@@ -46,7 +63,7 @@ int main(){
 
   //mise en place d'un contexte de rendu pour l'écran
   SDL_Renderer* ecran;
-  ecran = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED);
+  ecran = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   //initialisation du monde
   World* world = malloc(sizeof(world));
@@ -71,7 +88,7 @@ int main(){
   world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 7, -1, 32, 64, 100, 'e');
   world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, -1, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
-  world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 100, 'e');
+  world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 1000, 'e');
 
   //ennemi
   Enemy* boss = initialiser_enemy(world->tabSprites[15], 10);
@@ -92,11 +109,13 @@ int main(){
   ajouter_pattern(boss, mineO, 6);
 
   //competences
-  world->tabSprites[0]->comp = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
-  world->tabSprites[1]->comp = ajouter_comp_deplacement(world->tabSprites[1]->x, world->tabSprites[1]->y, ecran, 1);
-  world->tabSprites[2]->comp = ajouter_comp_deplacement(world->tabSprites[2]->x, world->tabSprites[2]->y, ecran, 2);
-  world->tabSprites[3]->comp = ajouter_comp_deplacement(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran, 3);
-
+  world->tabSprites[0]->comp[0] = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
+  world->tabSprites[1]->comp[0] = ajouter_comp_deplacement(world->tabSprites[1]->x, world->tabSprites[1]->y, ecran, 1);
+  world->tabSprites[2]->comp[0] = ajouter_comp_deplacement(world->tabSprites[2]->x, world->tabSprites[2]->y, ecran, 2);
+  world->tabSprites[3]->comp[0] = ajouter_comp_deplacement(world->tabSprites[3]->x, world->tabSprites[3]->y, ecran, 3);
+  for(int i = 0; i < 4; i++){
+    world->tabSprites[i]->comp[1] = ajouter_competence_attaque(world->tabSprites[i]->x, world->tabSprites[i]->y, ecran);
+  }
 
   //images chargement:
   SDL_Texture* lifebar = charger_image_transparente("images/interface/life.bmp", ecran, 0, 255, 255);
@@ -116,13 +135,18 @@ int main(){
   world->accueil = init_accueil(ecran);
 
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
+  
+  //ecran fin
+  world->fin = initialiser_ecran_fin(ecran);
 
   int compdraw = -1;
   int noPA = 0;
   int draw_surb=0;
   int perso = -1;
-  int draw = 0;
-
+  int draw = 0; //draw attaque
+  int tour = 1; //à qui le tour? 1 = joueur, -1 = ennemi
+  int nbrframe = 0; //nbr frame attaque
+  int nouveauTour = 0; //le tour vient-il juste de changer?
   //boucle principale
   while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -140,18 +164,31 @@ int main(){
             case 2:
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
-
 	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
 	    if(draw_surb == 1){
 		if(perso == 1){
-	            dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 4, mouseX, mouseY);
+	            dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 4, mouseX, mouseY);
 		}else{
-		     dessiner_comp_sur_tile(world->tabSprites[perso]->comp, ecran, 8, mouseX, mouseY);
+		     dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 8, mouseX, mouseY);
 		}
 	    }
-	    if(draw) 
-		dessiner_attaque_sur_tile(boss->atk[boss->pattern], ecran, TILE_WIDTH/2, TILE_HEIGHT/2, boss->atk[boss->pattern]->tailletab);
-            printf("%d,%d\n", mouseX, mouseY);
+	    if(draw_surb == 2)
+		dessiner_comp_sur_tile(world->tabSprites[perso]->comp[1], ecran, 25, mouseX, mouseY);
+	    if(draw){
+		if(nbrframe == 120){
+			draw = 0;
+			nbrframe = 0;
+			tour = 1;
+			nouveauTour = 1;
+		}else{
+		dessiner_attaque_sur_tile(boss->atk[boss->pattern - 1], ecran, boss->atk[boss->pattern - 1]->tailletab);
+		nbrframe++;
+		}
+	    }
+	    //test
+            //printf("%d,%d\n", mouseX, mouseY);
+	    //printf("%d", boss->sp->vie);
+
             for(int i = 0; i<15; i++){
                 dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
@@ -159,36 +196,71 @@ int main(){
 
 	    dessin_competence_cadre(ecran, comp, mousecoordX, mousecoordY, compdraw, noPA);
 
-            dessin_interface_niveau(ecran, portrait, cadre, lifebar,PA, bouton, mousecoordX, mousecoordY, world->tabSprites);
+            dessin_interface_niveau(ecran, portrait, cadre, lifebar,PA, bouton, mousecoordX, mousecoordY, tour, world->tabSprites);
+	    //gestion tour
+	    if(tour == -1 && draw == 0){
+	    	tour_ennemi(boss, world->tabSprites);
+		draw = 1;
+	    }
+	    if(nouveauTour){
+		for(int i = 0; i < 4; i++){
+		    if((world->tabSprites[i]->PA + 4) <= 6)
+			world->tabSprites[i]->PA += 4;
+		    else
+			world->tabSprites[i]->PA = 6;
+		}
+		nouveauTour = 0;
+		}
             SDL_RenderPresent(ecran);
             for(int i=0; i<100; i++){
                 DetruireSprites(world->tabSprites[i]);
-            } break;
+            } 
+
+	    //fin jeu
+	    if(boss->sp->vie == 0)
+		screen = 4;
+	    break;
 
             case 3:
                 terminer = true; break;
+
+	    case 4:
+		SDL_RenderClear(ecran);
+		dessiner_ecran_fin(world->fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
+	        SDL_RenderPresent(ecran);
+		break;
         }
         while (SDL_PollEvent(&evenements)) {
             switch(evenements.type) {
                 case SDL_QUIT:
                 terminer = true; break;
                 case SDL_MOUSEBUTTONUP:
-		    if(compdraw >= 0){
-			perso = compdraw;
-		        if((noPA != 1) && collisions_cadre_competence(mousecoordX, mousecoordY))
-			    draw_surb = 1;
-		    }
-		    if(draw_surb == 1 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 8)){
-			gestion_competence_deplacement(ecran, world->tabSprites[perso], mouseX,mouseY,-TILE_WIDTH/8,-TILE_HEIGHT/2, perso);
-			draw_surb = 0;
-		    }
-		    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
-		    if(compdraw >= 0){
-		        if(world->tabSprites[compdraw]->PA < 2){
-			    noPA = 1;
-			}else{
-			    noPA = 0;
-			}
+		    if(tour == 1){
+			    if(compdraw >= 0){
+				perso = compdraw;
+				if((noPA != 1) && collisions_cadre_competence(mousecoordX, mousecoordY))
+				    draw_surb = 1;
+				if((noPA != 1) && collisions_cadre_competence_attaque(mousecoordX, mousecoordY))
+				    draw_surb = 2;
+			    }
+			    if(draw_surb == 1 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 8, 0)){ //bug Liz
+				gestion_competence_deplacement(ecran, world->tabSprites[perso], mouseX,mouseY,-TILE_WIDTH/8,-TILE_HEIGHT/2, perso);
+				draw_surb = 0;
+			    }
+			    if(draw_surb == 2 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 24, 1)){
+				gestion_competence_attaque(world->tabSprites[perso], boss, mouseX,mouseY);
+				draw_surb = 0;
+			    }
+			    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
+			    if(compdraw >= 0){
+				if(world->tabSprites[compdraw]->PA < 2){
+				    noPA = 1;
+				}else{
+				    noPA = 0;
+				}
+			    }
+			    //tour terminé?
+		    	    tour = fin_tour(mousecoordX, mousecoordY);
 		    }
 		    break;
                 case SDL_KEYDOWN:
@@ -197,12 +269,9 @@ int main(){
                     case SDLK_q:
                     terminer = true; break;
                     case SDLK_n:
-			boss->pattern = 6;
-			jouer_pattern(boss, world->tabSprites, 0);
-			draw = 1;
+			world->tabSprites[15]->vie -= 50;
 			break;
                     case SDLK_b:
-			world->tabSprites[1]->PA = 6; 
 			break;
                 }
             }

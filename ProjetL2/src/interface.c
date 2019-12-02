@@ -30,57 +30,61 @@ int* initialiser_PA(){
 
 void dessin_interface_niveau(SDL_Renderer* renderer, 
 			     SDL_Texture* portrait, SDL_Texture* cadre, SDL_Texture* lifebar, SDL_Texture* PA, SDL_Texture* button,
-			     int mouseX, int mouseY,
+			     int mouseX, int mouseY, int fintour,
 			     Sprite** tab){
 
 	dessiner_cadre_perso(renderer, portrait, cadre, lifebar, PA, tab, mouseX, mouseY);
-	dessin_finTour(renderer, button, mouseX, mouseY);
+	dessin_finTour(renderer, button, mouseX, mouseY, fintour);
 }
 
 
 
 
-void dessiner_lifebar(SDL_Renderer* renderer, SDL_Texture* spritesheet, Sprite* s, int x, int y){
+void dessiner_lifebar(SDL_Renderer* renderer, SDL_Texture* spritesheet, Sprite* s, int x, int y, int vieMax, int ratio_rendu){
 
     //gestion tableau
-    //vie pleine
-    int nombreUn = s->vie/5 ;
-    int temp = 0;
+    int vie_pourcentage = (s->vie*100)/vieMax;
+    int taille_tabvie = 20;
 
+    //la barre de vie se vide d'un cran tous les 5% de vie perdus
+    int nombreUn = vie_pourcentage/5 ;
+    //barre milieu
     for(int i = 0; i<nombreUn; i++){
 	s->lifebar[i] = 1;
-	temp++;
     }
-    if(nombreUn == 20)
-	s->lifebar[19] = 2;
-    if(nombreUn > 0)
-	s->lifebar[0] = 0;
-
     //vie vide
-    for(int j = temp; j < 19; j++){
+    for(int j = nombreUn; j < taille_tabvie; j++){
 	s->lifebar[j] = 4;
     }
+  
+    //barre extrémité
+    if((nombreUn) == taille_tabvie){
+	s->lifebar[taille_tabvie - 1] = 2;
+    }else{
+	s->lifebar[taille_tabvie - 1] = 5;
+    }
 
-    if(nombreUn < 20)
-	s->lifebar[19] = 5;
-    if(nombreUn == 0)
+    if(nombreUn > 0){
+	s->lifebar[0] = 0;
+    }else{
 	s->lifebar[0] = 3;
+    }
 
     SDL_Rect SrcR;
     SDL_Rect DestR;
 
     //dessin
-    for(int i = 0; i<20; i++){
+    for(int i = 0; i < taille_tabvie; i++){
 
 	SrcR.x = (s->lifebar[i]%3) * LIFE_WIDTH;
 	SrcR.y = s->lifebar[i] > 2? LIFE_HEIGHT: 0;
 	SrcR.w = LIFE_WIDTH;
 	SrcR.h = LIFE_HEIGHT;
 
-	DestR.x = (x + i*LIFE_WIDTH) * 2;
+	DestR.x = (x + i*LIFE_WIDTH) * ratio_rendu;
 	DestR.y = y;
-	DestR.w = LIFE_WIDTH * 2;
-	DestR.h = LIFE_HEIGHT * 2;
+	DestR.w = LIFE_WIDTH * ratio_rendu;
+	DestR.h = LIFE_HEIGHT * ratio_rendu;
 
 	SDL_RenderCopy(renderer, spritesheet, &SrcR, &DestR);
     }
@@ -126,12 +130,13 @@ void dessiner_cadre_perso(SDL_Renderer* renderer, SDL_Texture* portrait, SDL_Tex
     for(int i = 0; i<4; i++){
 	int x = (40 + ((i%2)*CADRE_WIDTH));
 	int y = i > 1? SCREEN_HEIGHT - (15*2): SCREEN_HEIGHT - (50*2);
-	dessiner_lifebar(renderer, lifebar, tab[i], x,y);
+	dessiner_lifebar(renderer, lifebar, tab[i], x,y, 100, 2);
 
 	int xPA = 80 + ((i%2) * CADRE_WIDTH*2);
 	int yPA = i > 1? SCREEN_HEIGHT - (50): SCREEN_HEIGHT - (120);
 	dessiner_PA(renderer, PA, tab[i], xPA, yPA);
     }
+    dessiner_lifebar(renderer, lifebar, tab[15], SCREEN_WIDTH/13, 0, 1000, 4);
 }
 
 
@@ -178,18 +183,22 @@ void dessin_portraits(SDL_Renderer* renderer, SDL_Texture* portrait) {
     }
 }
 
-void dessin_finTour(SDL_Renderer* renderer, SDL_Texture* button, int mouseX, int mouseY){
+void dessin_finTour(SDL_Renderer* renderer, SDL_Texture* button, int mouseX, int mouseY, int fintour){
    SDL_Rect SrcR;
    SDL_Rect DestR;
 
-   DestR.x = SCREEN_WIDTH - 200;
-   DestR.y = SCREEN_HEIGHT -100;
-   DestR.w = 200;
-   DestR.h = 100;
+   DestR.x = FIN_TOUR_X; //SCREEN_WIDTH - 200;
+   DestR.y = FIN_TOUR_Y; //SCREEN_HEIGHT -100;
+   DestR.w = FIN_TOUR_WIDTH; //200;
+   DestR.h = FIN_TOUR_HEIGHT; //100;
 
    int offSet = 0;
-   if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h))
+   if(collisions_point_rect(mouseX, mouseY,DestR.x, DestR.y, DestR.w, DestR.h)){
 	offSet = 50;
+   }
+   if(fintour == -1){
+ 	offSet = 100;
+   }
 
    SrcR.x = 0;
    SrcR.y = 0 + offSet;

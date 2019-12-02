@@ -3,10 +3,10 @@
 
 Accueil* init_accueil(SDL_Renderer* renderer) {
     Accueil* a = malloc(sizeof(Accueil));
-    a->fond = charger_image("images/accueil.bmp", renderer);
-    a->titre = charger_image("images/titre.bmp", renderer);
-    a->jouer = charger_image("images/jouer.bmp", renderer);
-    a->quitter = charger_image("images/quitter.bmp", renderer);
+    a->fond = charger_image_transparente("images/accueil.bmp", renderer, 0, 255, 255);
+    a->titre = charger_image_transparente("images/titre.bmp", renderer, 0, 255, 255);
+    a->jouer = charger_image_transparente("images/jouer.bmp", renderer, 0, 255, 255);
+    a->quitter = charger_image_transparente("images/quitter.bmp", renderer, 0, 255, 255);
 
     return a;
 }
@@ -15,7 +15,7 @@ void affichage_accueil(SDL_Renderer* renderer, Accueil* a) {
     SDL_RenderCopy(renderer, a->fond, NULL, NULL);
     renderElement(renderer,a->titre, 0, 0, TITLE_WIDTH, TITLE_HEIGHT, 240, 200, TITLE_WIDTH, TITLE_HEIGHT);
     renderElement(renderer,a->jouer, 0, 0, PLAY_WIDTH, PLAY_HEIGHT, 490, 450, PLAY_WIDTH, PLAY_HEIGHT);
-    renderElement(renderer,a->quitter, 0, 0, QUIT_WIDTH, QUIT_HEIGHT, 440, 550, QUIT_WIDTH, QUIT_HEIGHT);
+    renderElement(renderer,a->quitter, 0, 0, QUIT_WIDTH, QUIT_HEIGHT, 440, 550, QUIT_WIDTH*2, QUIT_HEIGHT*2);
 
 }
 
