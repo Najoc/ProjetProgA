@@ -3,7 +3,7 @@
 
 Accueil* init_accueil(SDL_Renderer* renderer) {
     Accueil* a = malloc(sizeof(Accueil));
-    a->fond = charger_image_transparente("images/accueil.bmp", renderer, 0, 255, 255);
+    a->fond = charger_image_transparente("images/Background.bmp", renderer, 0, 255, 255);
     a->titre = charger_image_transparente("images/titre.bmp", renderer, 0, 255, 255);
     a->jouer = charger_image_transparente("images/jouer.bmp", renderer, 0, 255, 255);
     a->quitter = charger_image_transparente("images/quitter.bmp", renderer, 0, 255, 255);
