@@ -71,7 +71,7 @@ int main(){
   world->tabSprites[10] = initialiser_sprite(ecran, "images/soldat.bmp", 3,-1, 32, 64, 100, 'e');
   world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 5, -1, 32, 64, 100, 'e');
   world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 7, -1, 32, 64, 100, 'e');
-  world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, -1, 32, 64, 100, 'e');
+  world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, 10, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
   world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 1000, 'e');
 
@@ -122,7 +122,7 @@ int main(){
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
   
   //ecran fin
-  world->fin = initialiser_ecran_fin(ecran);
+  //world->fin = initialiser_ecran_fin(ecran);
 
   int compdraw = -1;
   int noPA = 0;
@@ -207,7 +207,7 @@ int main(){
 
 	    case 4:
 		SDL_RenderClear(ecran);
-		dessiner_ecran_fin(world->fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
+		//dessiner_ecran_fin(world->fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
 	        SDL_RenderPresent(ecran);
 		break;
         }
