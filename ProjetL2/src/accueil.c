@@ -35,3 +35,12 @@ void renderElement(SDL_Renderer* renderer, SDL_Texture* image, int SrcX, int Src
 
     SDL_RenderCopy(renderer, image, &SrcR, &DestR);
 }
+
+void detruire_accueil(Accueil* a){
+	SDL_DestroyTexture(a->fond); a->fond = NULL;
+	SDL_DestroyTexture(a->titre); a->titre = NULL;
+	SDL_DestroyTexture(a->jouer); a->jouer = NULL;
+	SDL_DestroyTexture(a->quitter); a->quitter = NULL;
+	free(a);
+	a = NULL;
+}

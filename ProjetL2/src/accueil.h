@@ -22,5 +22,6 @@ extern Accueil* init_accueil(SDL_Renderer* renderer);
 
 extern void affichage_accueil (SDL_Renderer* renderer, Accueil* a);
 extern void renderElement(SDL_Renderer* renderer, SDL_Texture* image, int SrcX, int SrcY, int SrcW, int SrcH, int DestX, int DestY, int DestW, int destH);
+extern void detruire_accueil();
 
 #endif // ACCUEIL_H

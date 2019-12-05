@@ -18,21 +18,6 @@
 #include "tour.h"
 #include "fin.h"
 
-int screenskip(SDL_Event event) {
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-    //condition chaangement écran
-    if (mouseX > 490 && mouseX < 490+PLAY_WIDTH && mouseY > 450 && mouseY < 450+PLAY_HEIGHT) {
-        if (event.type == SDL_MOUSEBUTTONUP)
-        return 2;
-    }
-    if (mouseX > 440 && mouseX < 440+QUIT_WIDTH && mouseY > 550 && mouseY < 550+QUIT_HEIGHT) {
-        if (event.type == SDL_MOUSEBUTTONUP)
-        return 3;
-    }
-    return 1;
-}
-
 int main(){
 
   SDL_Window* fenetre; //déclaration fenêtre
@@ -72,7 +57,7 @@ int main(){
   world->grille = initialiser_grille("images/terre.bmp", ecran, "grilles/general.txt", 10, 10) ;
   
   //tableau de sprites
-  world->tabSprites = allouer_tab_2D_Sprite(100,50);
+  world->tabSprites = allouer_tab_2D_Sprite(16,1);
   world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
   world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 8,9,32,64, 100, 'j');
   world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 7,0,32,64, 100, 'j');
@@ -185,9 +170,8 @@ int main(){
 		nbrframe++;
 		}
 	    }
-	    //test
-            //printf("%d,%d\n", mouseX, mouseY);
-	    //printf("%d", boss->sp->vie);
+            printf("%d,%d\n", mouseX, mouseY);
+
 
             for(int i = 0; i<15; i++){
                 dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
@@ -212,9 +196,6 @@ int main(){
 		nouveauTour = 0;
 		}
             SDL_RenderPresent(ecran);
-            for(int i=0; i<100; i++){
-                DetruireSprites(world->tabSprites[i]);
-            } 
 
 	    //fin jeu
 	    if(boss->sp->vie == 0)
@@ -278,12 +259,17 @@ int main(){
         }
     }
 
-
-
-  //libération de la grille
-  free(world);
-  world = NULL;
-
+  //libération
+  liberer_monde(world, 16);
+  SDL_DestroyTexture(brillant);
+  SDL_DestroyTexture(lifebar);
+  SDL_DestroyTexture(cadre);
+  SDL_DestroyTexture(portrait);
+  SDL_DestroyTexture(PA);
+  SDL_DestroyTexture(bouton);
+  SDL_DestroyTexture(comp);
+  effacer_enemy(boss);
+  
   // Fermer la police et quitter
   TTF_Quit();
   // Libération de l'écran (renderer)

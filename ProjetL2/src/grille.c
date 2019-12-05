@@ -76,10 +76,8 @@ char** lire_fichier(const char* nomFichier){
 	     {
 	      	i++;
 	      	j = 0;
-//	      	printf("\n");
 	     }else{
 	 	tab2D[i][j] = c;
-//		printf("%c", tab2D[i][j]);
 	 	j++;
 	     }
 	 }
@@ -153,6 +151,15 @@ void dessiner_surbrillance(SDL_Renderer* renderer, SDL_Texture* jaune, int mouse
 		SDL_RenderCopy(renderer, jaune, &SrcR, &DestR);
 	}
 
+}
+
+void detruire_grille(Tilemap* t){
+    desallouer_tab_2D(t->donnees, 10);
+    for(int i = 0; i < 10; i++){
+	free(t->tabTile[i]);
+    }
+    free(t->tabTile); t->tabTile = NULL;
+    free(t); t = NULL;
 }
 
 

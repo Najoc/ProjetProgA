@@ -35,7 +35,6 @@ extern char** lire_fichier(const char* nomFichier);
 extern Tilemap* initialiser_grille(const char* nomTileset ,SDL_Renderer* renderer, const char* nomFichier, int l,int h);
 extern void dessiner_grille(SDL_Renderer* renderer, Tilemap* g);
 extern void dessiner_surbrillance(SDL_Renderer* renderer, SDL_Texture* jaune, int mouseX, int mouseY);
-
-
+extern void detruire_grille(Tilemap* t);
 
 #endif

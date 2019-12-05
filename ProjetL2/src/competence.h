@@ -17,5 +17,6 @@ extern Competence* initialiser_competence(Tile* tab, char c, SDL_Renderer* rende
 extern Competence* ajouter_competence_attaque(int spriteX, int spriteY, SDL_Renderer* renderer);
 extern Competence* ajouter_comp_deplacement(int SpriteX, int SpriteY, SDL_Renderer* renderer, int choix);
 extern void dessiner_comp_sur_tile(Competence* c, SDL_Renderer* renderer, int longueurTab, int mouseX, int mouseY);
+extern void desallouer_comp(Competence* c);
 
 #endif //COMPETENCE_H

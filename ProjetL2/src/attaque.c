@@ -46,21 +46,21 @@ void dessiner_attaque_sur_tile(Attaque* a, SDL_Renderer* renderer, int taille){
     SDL_Rect DestR;
 
     for(int j = 0; j < taille; j++){
-	SrcR.x = a->currentFrame%3 * TILE_WIDTH/2;
-	SrcR.y = 0;
-	SrcR.w = TILE_WIDTH/2;
-	SrcR.h = TILE_HEIGHT/2;
+		SrcR.x = a->currentFrame%3 * TILE_WIDTH/2;
+		SrcR.y = 0;
+		SrcR.w = TILE_WIDTH/2;
+		SrcR.h = TILE_HEIGHT/2;
 
-	int RenderXatk = a->zone[j].x;
-	int RenderYatk = a->zone[j].y;
-	iso_to_coord(&RenderXatk, &RenderYatk);
+		int RenderXatk = a->zone[j].x;
+		int RenderYatk = a->zone[j].y;
+		iso_to_coord(&RenderXatk, &RenderYatk);
 
-	DestR.x = RenderXatk - TILE_WIDTH/2;
-	DestR.y = RenderYatk;
-	DestR.w = TILE_WIDTH;
-	DestR.h = TILE_HEIGHT;
-		
-	SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
+		DestR.x = RenderXatk - TILE_WIDTH/2;
+		DestR.y = RenderYatk;
+		DestR.w = TILE_WIDTH;
+		DestR.h = TILE_HEIGHT;
+			
+		SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
     }
     a->currentFrame++;
 }
@@ -86,7 +86,9 @@ void dessiner_attaque_sur_sprite(Attaque* a, SDL_Renderer* renderer, Sprite* s, 
 
 
 void effacer_attaque(Attaque* a){
-	free(a);
+	SDL_DestroyTexture(a->Frame); a->Frame = NULL;
+	free(a->zone); a->zone = NULL;
+	free(a); a = NULL;
 }
 
 

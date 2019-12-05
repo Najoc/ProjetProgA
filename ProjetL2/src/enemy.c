@@ -49,3 +49,11 @@ void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
 	}
     }
 }
+
+void effacer_enemy(Enemy* e){
+    DetruireSprites(e->sp); e->sp = NULL;
+    for(int i=0; i<7; i++)
+    	effacer_attaque(e->atk[i]);
+    free(e->atk); e->atk = NULL;
+    free(e); e = NULL;
+}

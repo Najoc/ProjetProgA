@@ -92,34 +92,41 @@ void dessiner_comp_sur_tile(Competence* c, SDL_Renderer* renderer, int longueurT
 
     for(int i = 0; i < longueurTab; i++){
 
-        int offset = 0;
-	if((c->type == 'd')){
-	     if((mouseX == c->zonePossible[i].x) && (mouseY == c->zonePossible[i].y))
-	    	offset = TILE_WIDTH/2;
-	     SrcR.x = TILE_WIDTH/2 + offset;
+		    int offset = 0;
+		if((c->type == 'd')){
+			 if((mouseX == c->zonePossible[i].x) && (mouseY == c->zonePossible[i].y))
+				offset = TILE_WIDTH/2;
+			 SrcR.x = TILE_WIDTH/2 + offset;
+		}
+
+		if((c->type == 'a')){
+			if((mouseX == c->zonePossible[i].x) && (mouseY == c->zonePossible[i].y))
+			    offset = TILE_WIDTH/2;
+			SrcR.x = (TILE_WIDTH + TILE_WIDTH/2) + offset;
+		}
+
+			SrcR.y = 0;
+			SrcR.w = TILE_WIDTH/2;
+			SrcR.h = TILE_HEIGHT/2;
+
+		if(c->zonePossible[i].x >= 0 && c->zonePossible[i].x <= 9 && c->zonePossible[i].y >= 0 && c->zonePossible[i].y <= 9){
+			int RenderXcomp = c->zonePossible[i].x;
+			int RenderYcomp = c->zonePossible[i].y;
+			    iso_to_coord(&RenderXcomp, &RenderYcomp);
+
+			    DestR.x = RenderXcomp - TILE_WIDTH/2;
+			    DestR.y = RenderYcomp;
+			    DestR.w = TILE_WIDTH;
+			    DestR.h = TILE_HEIGHT;
+		
+			SDL_RenderCopy(renderer, c->texture, &SrcR, &DestR);
+		}
 	}
-
-	if((c->type == 'a')){
-	    if((mouseX == c->zonePossible[i].x) && (mouseY == c->zonePossible[i].y))
-	        offset = TILE_WIDTH/2;
-	    SrcR.x = (TILE_WIDTH + TILE_WIDTH/2) + offset;
-	}
-
-    	SrcR.y = 0;
-    	SrcR.w = TILE_WIDTH/2;
-    	SrcR.h = TILE_HEIGHT/2;
-
-	if(c->zonePossible[i].x >= 0 && c->zonePossible[i].x <= 9 && c->zonePossible[i].y >= 0 && c->zonePossible[i].y <= 9){
-	    int RenderXcomp = c->zonePossible[i].x;
-	    int RenderYcomp = c->zonePossible[i].y;
-    	    iso_to_coord(&RenderXcomp, &RenderYcomp);
-
-    	    DestR.x = RenderXcomp - TILE_WIDTH/2;
-    	    DestR.y = RenderYcomp;
-    	    DestR.w = TILE_WIDTH;
-    	    DestR.h = TILE_HEIGHT;
-	
-	    SDL_RenderCopy(renderer, c->texture, &SrcR, &DestR);
-	}
-    }
 }
+
+void desallouer_comp(Competence* c){
+	free(c->zonePossible); c->zonePossible = NULL;
+	SDL_DestroyTexture(c->texture); c->texture = NULL;
+	free(c); c = NULL;
+
+	}
