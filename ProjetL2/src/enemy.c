@@ -38,7 +38,6 @@ void jouer_pattern(Enemy* e, Sprite** tab, int cible){
 
 void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
     if(mouseX >= s->comp[1]->zonePossible[0].x && mouseY >= s->comp[1]->zonePossible[0].y && mouseX <= s->comp[1]->zonePossible[24].x && mouseY <= s->comp[1]->zonePossible[24].x){
-	printf("hey");
 	if(e->sp->x == mouseX && e->sp->y == mouseY){
 	    if(e->sp->vie - 500 < 0){
 		e->sp->vie = 0;
@@ -52,7 +51,7 @@ void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
 
 void effacer_enemy(Enemy* e){
     DetruireSprites(e->sp); e->sp = NULL;
-    for(int i=0; i<7; i++)
+    for(int i=0; i<6; i++)
     	effacer_attaque(e->atk[i]);
     free(e->atk); e->atk = NULL;
     free(e); e = NULL;

@@ -63,13 +63,13 @@ int main(){
   world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 7,0,32,64, 100, 'j');
   world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,6,32,64, 100, 'j');
   world->tabSprites[4] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 0, 32, 64, 100, 'e');
-  world->tabSprites[5] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 2, 32, 64, 100, 'e');
+  world->tabSprites[5] = initialiser_sprite(ecran, "images/soldat.bmp", 10, 2, 32, 64, 100, 'e');
   world->tabSprites[6] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 4, 32, 64, 100, 'e');
-  world->tabSprites[7] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 6, 32, 64, 100, 'e');
+  world->tabSprites[7] = initialiser_sprite(ecran, "images/soldat.bmp", 10, 6, 32, 64, 100, 'e');
   world->tabSprites[8] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 8, 32, 64, 100, 'e');
-  world->tabSprites[9] = initialiser_sprite(ecran, "images/soldat.bmp", 1, -1, 32, 64, 100, 'e');
+  world->tabSprites[9] = initialiser_sprite(ecran, "images/soldat.bmp", 1, 10, 32, 64, 100, 'e');
   world->tabSprites[10] = initialiser_sprite(ecran, "images/soldat.bmp", 3,-1, 32, 64, 100, 'e');
-  world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 5, -1, 32, 64, 100, 'e');
+  world->tabSprites[11] = initialiser_sprite(ecran, "images/soldat.bmp", 5, 10, 32, 64, 100, 'e');
   world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 7, -1, 32, 64, 100, 'e');
   world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, 10, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
@@ -80,18 +80,20 @@ int main(){
   Attaque* tir_soldat2 = tir_soldat_2(ecran);
   Attaque* tir_soldat6 = tir_soldat_6(ecran);
   Attaque* tir_soldat10 = tir_soldat_10(ecran);
-  Attaque* mineN = proximiteN(ecran);
-  Attaque* mineS = proximiteS(ecran);
-  Attaque* mineE = proximiteE(ecran);
-  Attaque* mineO = proximiteO(ecran);
+  Attaque* mineN = proximiteNS(ecran);
+  Attaque* mineE = proximiteEO(ecran);
+  Attaque* laser1 = laser(ecran);
+  Attaque* laser11 = laser2(ecran);
 
+  //pattern boss
   ajouter_pattern(boss, tir_soldat2, 0);
   ajouter_pattern(boss, tir_soldat6, 1);
   ajouter_pattern(boss, tir_soldat10, 2);
   ajouter_pattern(boss, mineN, 3);
-  ajouter_pattern(boss, mineS, 4);
-  ajouter_pattern(boss, mineE, 5);
-  ajouter_pattern(boss, mineO, 6);
+  ajouter_pattern(boss, mineE, 4);
+  //pattern commando
+  ajouter_pattern(boss, laser1, 5);
+  ajouter_pattern(boss, laser11, 6);
 
   //competences
   world->tabSprites[0]->comp[0] = ajouter_comp_deplacement(world->tabSprites[0]->x, world->tabSprites[0]->y, ecran, 0);
@@ -122,7 +124,7 @@ int main(){
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
   
   //ecran fin
-  //world->fin = initialiser_ecran_fin(ecran);
+  Ecran_fin* fin = initialiser_ecran_fin(ecran);
 
   int compdraw = -1;
   int noPA = 0;
@@ -133,7 +135,7 @@ int main(){
   int nbrframe = 0; //nbr frame attaque
   int nouveauTour = 0; //le tour vient-il juste de changer?
   //boucle principale
-  while(!terminer) {
+  while(!terminer) {	
 	SDL_GetMouseState(&mouseX, &mouseY);
 	int mousecoordX = mouseX;
 	int mousecoordY = mouseY;
@@ -160,7 +162,7 @@ int main(){
 	    if(draw_surb == 2)
 		dessiner_comp_sur_tile(world->tabSprites[perso]->comp[1], ecran, 25, mouseX, mouseY);
 	    if(draw){
-		if(nbrframe == 120){
+		if(nbrframe == 60){
 			draw = 0;
 			nbrframe = 0;
 			tour = 1;
@@ -207,7 +209,7 @@ int main(){
 
 	    case 4:
 		SDL_RenderClear(ecran);
-		//dessiner_ecran_fin(world->fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
+		dessiner_ecran_fin(fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
 	        SDL_RenderPresent(ecran);
 		break;
         }
@@ -260,7 +262,7 @@ int main(){
     }
 
   //libération
-  liberer_monde(world, 16);
+  liberer_monde(world, 14);
   SDL_DestroyTexture(brillant);
   SDL_DestroyTexture(lifebar);
   SDL_DestroyTexture(cadre);
@@ -268,6 +270,7 @@ int main(){
   SDL_DestroyTexture(PA);
   SDL_DestroyTexture(bouton);
   SDL_DestroyTexture(comp);
+  effacer_fin(fin);
   effacer_enemy(boss);
   
   // Fermer la police et quitter

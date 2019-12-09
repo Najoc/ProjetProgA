@@ -18,7 +18,6 @@ int screenskip(SDL_Event event) {
 void liberer_monde(World* w, int tailleSprites){
     detruire_accueil(w->accueil); w->accueil = NULL;
     detruire_grille(w->grille); w->grille = NULL;
-    //effacer_fin(w->fin); w->fin = NULL;
     effacer_enemy(w->tabEnemy); w->tabEnemy = NULL;
     for(int i = 0; i < tailleSprites; i++){
 	DetruireSprites(w->tabSprites[i]);
