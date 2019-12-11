@@ -55,7 +55,7 @@ int main(){
 
   //enregistrement contenant la map
   world->grille = initialiser_grille("images/terre.bmp", ecran, "grilles/general.txt", 10, 10) ;
-  
+
   //tableau de sprites
   world->tabSprites = allouer_tab_2D_Sprite(16,1);
   world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
@@ -122,7 +122,7 @@ int main(){
   world->accueil = init_accueil(ecran);
 
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
-  
+
   //ecran fin
   Ecran_fin* fin = initialiser_ecran_fin(ecran);
 
@@ -135,85 +135,85 @@ int main(){
   int nbrframe = 0; //nbr frame attaque
   int nouveauTour = 0; //le tour vient-il juste de changer?
   //boucle principale
-  while(!terminer) {	
+  while(!terminer) {
 	SDL_GetMouseState(&mouseX, &mouseY);
 	int mousecoordX = mouseX;
 	int mousecoordY = mouseY;
         coord_to_iso(&mouseX, &mouseY);
         switch (screen) {
+
             case 1:
             SDL_RenderClear(ecran);
-            affichage_accueil(ecran, world->accueil);
-            screen = screenskip( evenements);
+            affichage_accueil(ecran, world->accueil, &mouseX, &mouseY);
+            screen = screenskip(evenements, world->accueil);
             SDL_RenderPresent(ecran);
             break;
 
             case 2:
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
-	    dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
-	    if(draw_surb == 1){
-		if(perso == 1){
-	            dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 4, mouseX, mouseY);
-		}else{
-		     dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 8, mouseX, mouseY);
-		}
-	    }
-	    if(draw_surb == 2)
-		dessiner_comp_sur_tile(world->tabSprites[perso]->comp[1], ecran, 25, mouseX, mouseY);
-	    if(draw){
-		if(nbrframe == 60){
-			draw = 0;
-			nbrframe = 0;
-			tour = 1;
-			nouveauTour = 1;
-		}else{
-		dessiner_attaque_sur_tile(boss->atk[boss->pattern - 1], ecran, boss->atk[boss->pattern - 1]->tailletab);
-		nbrframe++;
-		}
-	    }
+            dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
+            if(draw_surb == 1){
+              if(perso == 1){
+                dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 4, mouseX, mouseY);
+              }else{
+                dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 8, mouseX, mouseY);
+              }
+            }
+            if(draw_surb == 2)
+              dessiner_comp_sur_tile(world->tabSprites[perso]->comp[1], ecran, 25, mouseX, mouseY);
+            if(draw){
+              if(nbrframe == 60){
+                draw = 0;
+                nbrframe = 0;
+                tour = 1;
+                nouveauTour = 1;
+              }else{
+                dessiner_attaque_sur_tile(boss->atk[boss->pattern - 1], ecran, boss->atk[boss->pattern - 1]->tailletab);
+                nbrframe++;
+              }
+            }
             printf("%d,%d\n", mouseX, mouseY);
 
-
             for(int i = 0; i<15; i++){
-                dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
+              dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
             }
-	    dessiner_sprite(ecran, world->tabSprites[15], -(world->tabSprites[15]->width/2), -(world->tabSprites[15]->height/2 + TILE_HEIGHT));
-
-	    dessin_competence_cadre(ecran, comp, mousecoordX, mousecoordY, compdraw, noPA);
-
+            dessiner_sprite(ecran, world->tabSprites[15], -(world->tabSprites[15]->width/2), -(world->tabSprites[15]->height/2 + TILE_HEIGHT));
+            dessin_competence_cadre(ecran, comp, mousecoordX, mousecoordY, compdraw, noPA);
             dessin_interface_niveau(ecran, portrait, cadre, lifebar,PA, bouton, mousecoordX, mousecoordY, tour, world->tabSprites);
-	    //gestion tour
-	    if(tour == -1 && draw == 0){
-	    	tour_ennemi(boss, world->tabSprites);
-		draw = 1;
-	    }
-	    if(nouveauTour){
-		for(int i = 0; i < 4; i++){
-		    if((world->tabSprites[i]->PA + 4) <= 6)
-			world->tabSprites[i]->PA += 4;
-		    else
-			world->tabSprites[i]->PA = 6;
-		}
-		nouveauTour = 0;
-		}
+
+            //gestion tour
+            if(tour == -1 && draw == 0){
+            tour_ennemi(boss, world->tabSprites);
+            draw = 1;
+            }
+            if(nouveauTour){
+              for(int i = 0; i < 4; i++){
+                if((world->tabSprites[i]->PA + 4) <= 6)
+                  world->tabSprites[i]->PA += 4;
+                else
+                  world->tabSprites[i]->PA = 6;
+              }
+              nouveauTour = 0;
+            }
             SDL_RenderPresent(ecran);
 
-	    //fin jeu
-	    if(boss->sp->vie == 0)
-		screen = 4;
-	    break;
+            //fin jeu
+            if(boss->sp->vie == 0)
+              screen = 4;
+            break;
 
             case 3:
                 terminer = true; break;
 
-	    case 4:
-		SDL_RenderClear(ecran);
-		dessiner_ecran_fin(fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
-	        SDL_RenderPresent(ecran);
-		break;
-        }
-        while (SDL_PollEvent(&evenements)) {
+            case 4:
+            SDL_RenderClear(ecran);
+            dessiner_ecran_fin(fin, ecran, mousecoordX, mousecoordY, evenements, &screen);
+            SDL_RenderPresent(ecran);
+            break;
+
+            }
+            while (SDL_PollEvent(&evenements)) {
             switch(evenements.type) {
                 case SDL_QUIT:
                 terminer = true; break;
@@ -272,7 +272,7 @@ int main(){
   SDL_DestroyTexture(comp);
   effacer_fin(fin);
   effacer_enemy(boss);
-  
+
   // Fermer la police et quitter
   TTF_Quit();
   // Libération de l'écran (renderer)

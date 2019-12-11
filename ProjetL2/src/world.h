@@ -20,7 +20,7 @@ typedef struct world{
     Ecran_fin* fin;
 }World;
 
-extern int screenskip(SDL_Event event);
+extern int screenskip(SDL_Event event, Accueil *a);
 extern void liberer_monde(World* w, int tailleSprites);
 
 #endif
