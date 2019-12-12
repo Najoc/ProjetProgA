@@ -33,6 +33,6 @@ void liberer_monde(World* w, int tailleSprites){
     for(int i = 0; i < tailleSprites; i++){
 	DetruireSprites(w->tabSprites[i]);
     }
-    w->tabSprites = NULL;
+    free(w->tabSprites); w->tabSprites = NULL;
     free(w); w = NULL;
 }

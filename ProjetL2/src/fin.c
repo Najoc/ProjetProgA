@@ -72,4 +72,5 @@ void effacer_fin(Ecran_fin* ef){
     SDL_DestroyTexture(ef->fond); ef->fond = NULL;
     SDL_DestroyTexture(ef->quitter); ef->quitter = NULL;
     SDL_DestroyTexture(ef->you_win); ef->you_win = NULL;
+    free(ef); ef = NULL;
 }

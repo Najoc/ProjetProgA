@@ -209,7 +209,7 @@ int main(){
 	      world->tabSprites[15]->y = rand()%9;
 	      nouveauTour = 0;
             }
-            
+
 	    //perdu
 	    for(int i = 0; i < 4; i++){
 		if(world->tabSprites[i]->vie == 0){
@@ -288,7 +288,7 @@ int main(){
 	            case SDLK_a:
 			if(compdraw >= 0)
 			    perso = compdraw;
-			draw_surb = 2; break;			
+			draw_surb = 2; break;
                     case SDLK_ESCAPE:
                     case SDLK_p:
                     terminer = true; break;
@@ -303,7 +303,7 @@ int main(){
     }
 
   //libération
-  liberer_monde(world, 14);
+  liberer_monde(world, 15);
   SDL_DestroyTexture(brillant);
   SDL_DestroyTexture(lifebar);
   SDL_DestroyTexture(cadre);

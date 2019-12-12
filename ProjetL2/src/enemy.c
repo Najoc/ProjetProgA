@@ -50,9 +50,21 @@ void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
 }
 
 void effacer_enemy(Enemy* e){
-    DetruireSprites(e->sp); e->sp = NULL;
+    //DetruireSprites(e->sp); e->sp = NULL;
     for(int i=0; i<6; i++)
     	effacer_attaque(e->atk[i]);
     free(e->atk); e->atk = NULL;
+    SDL_DestroyTexture(e->sp->asset); e->sp->asset = NULL;
+	free(e->sp->lifebar); e->sp->lifebar = NULL;
+	free(e->sp); e->sp = NULL;
     free(e); e = NULL;
 }
+
+
+
+
+
+
+
+
+

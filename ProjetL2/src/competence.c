@@ -22,7 +22,7 @@ Competence* ajouter_competence_attaque(int spriteX, int spriteY, SDL_Renderer* r
     int k = 0;
     for(int i = 0; i<5; i++){
 	for(int j = 0; j<5; j++){
-	    t[k].x = (spriteX -2)  + i; t[k].y = (spriteY -2) + j;	
+	    t[k].x = (spriteX -2)  + i; t[k].y = (spriteY -2) + j;
 	    k++;
 	}
     }
@@ -84,7 +84,7 @@ Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* ren
         t[7].x = spriteX; t[7].y = spriteY+1;
     }
 
-    
+
     c = initialiser_competence(t, 'd', renderer);
     return c;
 }
@@ -122,7 +122,7 @@ void dessiner_comp_sur_tile(Competence* c, SDL_Renderer* renderer, int longueurT
 			    DestR.y = RenderYcomp;
 			    DestR.w = TILE_WIDTH;
 			    DestR.h = TILE_HEIGHT;
-		
+
 			SDL_RenderCopy(renderer, c->texture, &SrcR, &DestR);
 		}
 	}

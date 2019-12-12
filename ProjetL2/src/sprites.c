@@ -61,6 +61,8 @@ void DetruireSprites(Sprite* s){
     SDL_DestroyTexture(s->asset); s->asset = NULL;
 	free(s->lifebar); s->lifebar = NULL;
 	free(s->jaugePA); s->jaugePA = NULL;
+	//desallouer_comp(s->comp[0]);
+	//desallouer_comp(s->comp[1]);
 	free(s); s = NULL;
 }
 
@@ -71,7 +73,7 @@ void gestion_competence_deplacement(SDL_Renderer* renderer, Sprite* s, int mouse
     free(s->comp[1]);
     s->comp[0] = ajouter_comp_deplacement(s->x, s->y, renderer, choix);
     s->comp[1] = ajouter_competence_attaque(s->x, s->y, renderer);
-    
+
 }
 
 
