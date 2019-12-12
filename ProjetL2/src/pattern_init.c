@@ -62,13 +62,13 @@ Attaque* proximiteEO(SDL_Renderer* renderer){
     int k = 0;
     for(int i = 0; i<7; i++){
         for(int j = 0; j < i+1; j++){
-	    mine[k].x = 9 - i + j; mine[k].y = 0 + j; mine[k].degats = 100 - (40*i);
+	    mine[k].x = 9 - i + j; mine[k].y = 0 + j; mine[k].degats = 40;
 	    k++;
 	}
     }
     for(int i = 0; i<7; i++){
         for(int j = 0; j < i+1; j++){
-	    mine[k].x = 0 + j; mine[k].y = 9 - i + j; mine[k].degats = 100 - (40*i);
+	    mine[k].x = 0 + j; mine[k].y = 9 - i + j; mine[k].degats = 40;
 	    k++;
 	}
     }

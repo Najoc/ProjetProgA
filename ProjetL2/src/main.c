@@ -181,7 +181,10 @@ int main(){
                 nbrframe = 0;
                 tour = 1;
                 nouveauTour = 1;
-		boss->pattern++;
+		if((boss->pattern + 1) > 6)
+		    boss->pattern = 0;
+		else
+		    boss->pattern++;
               }else{
                 dessiner_attaque_sur_tile(boss->atk[boss->pattern], ecran, boss->atk[boss->pattern]->tailletab);
                 nbrframe++;

@@ -28,7 +28,7 @@ void attaquer(Sprite* s, Attaque* attaque, int taille){
 	    if((s->x == attaque->zone[i].x) && (s->y == attaque->zone[i].y)){
 
 		//calcul de dégâts
-		if((s->vie - attaque->zone[i].degats < 0)){
+		if((s->vie - attaque->zone[i].degats <= 0)){
 		     s->vie = 0;
 		}else{
 		     s->vie -= attaque->zone[i].degats;
