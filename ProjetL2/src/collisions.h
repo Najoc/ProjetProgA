@@ -11,5 +11,6 @@ extern int collisions_cadre_perso(int mouseX, int mouseY);
 extern int collisions_cadre_competence(int mouseX, int mouseY);
 extern int collisions_cadre_competence_attaque(int mouseX, int mouseY);
 extern int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur, int numero_competence);
+extern int collisions_souris_aide(int mouseX, int mouseY);
 
 #endif //COLLISIONS_H

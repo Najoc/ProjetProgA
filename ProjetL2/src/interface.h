@@ -20,5 +20,6 @@ extern void dessin_cadre(SDL_Renderer* renderer, SDL_Texture* cadre, int mouseX,
 extern void dessin_portraits(SDL_Renderer* renderer, SDL_Texture* portrait);
 extern void dessin_finTour(SDL_Renderer* renderer, SDL_Texture* button, int mouseX, int mouseY, int fintour);
 extern void dessin_competence_cadre(SDL_Renderer* renderer, SDL_Texture* comp, int mouseX, int mouseY, int compdraw, int noPA);
+extern void dessin_aide(SDL_Renderer* renderer, SDL_Texture* aide);
 
 #endif //INTERFACE_H

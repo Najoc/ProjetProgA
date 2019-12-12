@@ -256,6 +256,23 @@ void dessin_competence_cadre(SDL_Renderer* renderer, SDL_Texture* comp, int mous
 
 }
 
+void dessin_aide(SDL_Renderer* renderer, SDL_Texture* aide){
+  SDL_Rect SrcR;
+  SDL_Rect DestR;
+
+   SrcR.x = 0;
+   SrcR.y = 0;
+   SrcR.w = TILE_HEIGHT;
+   SrcR.h = TILE_HEIGHT;
+
+   DestR.x = 0;
+   DestR.y = 0;
+   DestR.w = TILE_HEIGHT;
+   DestR.h = TILE_HEIGHT;
+
+   SDL_RenderCopy(renderer, aide, &SrcR, &DestR);
+}
+
 
 
 

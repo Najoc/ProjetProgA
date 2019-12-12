@@ -15,11 +15,11 @@
 typedef struct world{
     Tilemap* grille;
     Sprite** tabSprites;
-    Enemy* tabEnemy;
     Accueil* accueil;
-    Ecran_fin* fin;
+    //Ecran_fin* fin;
 }World;
 
+extern World* initialiser_monde(SDL_Renderer* renderer);
 extern int screenskip(SDL_Event event, Accueil *a);
 extern void liberer_monde(World* w, int tailleSprites);
 

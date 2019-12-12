@@ -1,5 +1,15 @@
 #include "world.h"
 
+World* initialiser_monde(SDL_Renderer* renderer)
+{
+	World* w = malloc(sizeof(World));
+	w->grille = initialiser_grille("images/terre.bmp", renderer, "grilles/general.txt", 10, 10);
+	w->tabSprites = allouer_tab_2D_Sprite(16,1);
+	w->accueil = init_accueil(renderer);
+	//w->Ecran_fin = initialiser_ecran_fin(renderer);
+	return w;
+}
+
 int screenskip(SDL_Event event, Accueil *a) {
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
@@ -19,9 +29,9 @@ int screenskip(SDL_Event event, Accueil *a) {
 }
 
 void liberer_monde(World* w, int tailleSprites){
-    //detruire_accueil(w->accueil); w->accueil = NULL;
+    detruire_accueil(w->accueil); w->accueil = NULL;
     detruire_grille(w->grille); w->grille = NULL;
-    effacer_enemy(w->tabEnemy); w->tabEnemy = NULL;
+    //effacer_enemy(w->tabEnemy); w->tabEnemy = NULL;
     for(int i = 0; i < tailleSprites; i++){
 	DetruireSprites(w->tabSprites[i]);
     }

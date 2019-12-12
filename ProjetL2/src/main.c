@@ -14,6 +14,7 @@
 #include "attaque.h"
 #include "competence.h"
 #include "enemy.h"
+#include <time.h>
 #include "pattern_init.h"
 #include "tour.h"
 #include "fin.h"
@@ -51,17 +52,18 @@ int main(){
   ecran = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   //initialisation du monde
-  World* world = malloc(sizeof(world));
+  World* world = initialiser_monde(ecran);
 
   //enregistrement contenant la map
-  world->grille = initialiser_grille("images/terre.bmp", ecran, "grilles/general.txt", 10, 10) ;
+
+  //graine pour l'aléatoire
+  srand(time(NULL));
 
   //tableau de sprites
-  world->tabSprites = allouer_tab_2D_Sprite(16,1);
-  world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", 4,0,32,64, 100, 'j');
-  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", 8,9,32,64, 100, 'j');
-  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", 7,0,32,64, 100, 'j');
-  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", 5,6,32,64, 100, 'j');
+  world->tabSprites[0] = initialiser_sprite(ecran,"images/Cadell.bmp", rand()%9,rand()%9,32,64, 100, 'j');
+  world->tabSprites[1] = initialiser_sprite(ecran,"images/alienor.bmp", rand()%9,rand()%9,32,64, 100, 'j');
+  world->tabSprites[2] = initialiser_sprite(ecran,"images/dietrich.bmp", rand()%9,rand()%9,32,64, 100, 'j');
+  world->tabSprites[3] = initialiser_sprite(ecran,"images/liz.bmp", rand()%9,rand()%9,32,64, 100, 'j');
   world->tabSprites[4] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 0, 32, 64, 100, 'e');
   world->tabSprites[5] = initialiser_sprite(ecran, "images/soldat.bmp", 10, 2, 32, 64, 100, 'e');
   world->tabSprites[6] = initialiser_sprite(ecran, "images/soldat.bmp", -1, 4, 32, 64, 100, 'e');
@@ -73,7 +75,7 @@ int main(){
   world->tabSprites[12] = initialiser_sprite(ecran, "images/soldat.bmp", 7, -1, 32, 64, 100, 'e');
   world->tabSprites[13] = initialiser_sprite(ecran, "images/soldat.bmp", 9, 10, 32, 64, 100, 'e');
   world->tabSprites[14] = initialiser_sprite(ecran, "images/commando.bmp", 5, -3, 32, 64, 100, 'e');
-  world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", 5, 2, 96, 192, 1000, 'e');
+  world->tabSprites[15] = initialiser_sprite(ecran, "images/general.bmp", rand()%9, rand()%9, 96, 192, 1000, 'e');
 
   //ennemi
   Enemy* boss = initialiser_enemy(world->tabSprites[15], 10);
@@ -91,7 +93,6 @@ int main(){
   ajouter_pattern(boss, tir_soldat10, 2);
   ajouter_pattern(boss, mineN, 3);
   ajouter_pattern(boss, mineE, 4);
-  //pattern commando
   ajouter_pattern(boss, laser1, 5);
   ajouter_pattern(boss, laser11, 6);
 
@@ -112,6 +113,13 @@ int main(){
   SDL_Texture* bouton = charger_image_transparente("images/interface/finTour.bmp", ecran, 0, 255, 255);
   SDL_Texture* comp = charger_image_transparente("images/interface/competence.bmp", ecran, 0, 255, 255);
 
+  //mort
+  SDL_Texture* guy = charger_image_transparente("images/guy.bmp", ecran, 0, 255, 255);
+
+  //surbrillance attaque boss
+  SDL_Texture* alerte = charger_image_transparente("images/alerte.bmp", ecran, 0, 255, 255);
+  SDL_Texture* aide = charger_image_transparente("images/aide.bmp", ecran, 0, 255, 255);
+
   //coordonnées souris
   int mouseX, mouseY;
 
@@ -125,6 +133,7 @@ int main(){
 
   //ecran fin
   Ecran_fin* fin = initialiser_ecran_fin(ecran);
+
 
   int compdraw = -1;
   int noPA = 0;
@@ -152,6 +161,10 @@ int main(){
             case 2:
             SDL_RenderClear(ecran);
             dessiner_grille(ecran, world->grille);
+	    dessin_aide(ecran, aide);
+	    if(collisions_souris_aide(mousecoordX, mousecoordY))
+	        dessiner_surb_attaque(boss->atk[boss->pattern], ecran, alerte, boss->atk[boss->pattern]->tailletab);
+
             dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
             if(draw_surb == 1){
               if(perso == 1){
@@ -168,8 +181,9 @@ int main(){
                 nbrframe = 0;
                 tour = 1;
                 nouveauTour = 1;
+		boss->pattern++;
               }else{
-                dessiner_attaque_sur_tile(boss->atk[boss->pattern - 1], ecran, boss->atk[boss->pattern - 1]->tailletab);
+                dessiner_attaque_sur_tile(boss->atk[boss->pattern], ecran, boss->atk[boss->pattern]->tailletab);
                 nbrframe++;
               }
             }
@@ -194,13 +208,28 @@ int main(){
                 else
                   world->tabSprites[i]->PA = 6;
               }
-              nouveauTour = 0;
+              //replacement boss
+	      world->tabSprites[15]->x = rand()%9;
+	      world->tabSprites[15]->y = rand()%9;
+	      nouveauTour = 0;
             }
-            SDL_RenderPresent(ecran);
-
+            
+	    //perdu
+	    for(int i = 0; i < 4; i++){
+		if(world->tabSprites[i]->vie == 0){
+		    world->tabSprites[i]->isDead = 1;
+		    world->tabSprites[i]->asset = guy;
+		}
+	    }
+	    if(world->tabSprites[0]->isDead
+	    && world->tabSprites[1]->isDead
+	    && world->tabSprites[2]->isDead
+    	    && world->tabSprites[3]->isDead)
+		screen = 4;
             //fin jeu
             if(boss->sp->vie == 0)
               screen = 4;
+	    SDL_RenderPresent(ecran);
             break;
 
             case 3:
@@ -236,7 +265,7 @@ int main(){
 			    }
 			    compdraw = collisions_cadre_perso(mousecoordX,mousecoordY);
 			    if(compdraw >= 0){
-				if(world->tabSprites[compdraw]->PA < 2){
+				if((world->tabSprites[compdraw]->PA < 2) || (world->tabSprites[compdraw]->isDead)){
 				    noPA = 1;
 				}else{
 				    noPA = 0;
@@ -270,6 +299,8 @@ int main(){
   SDL_DestroyTexture(PA);
   SDL_DestroyTexture(bouton);
   SDL_DestroyTexture(comp);
+  SDL_DestroyTexture(guy);
+  SDL_DestroyTexture(alerte);
   effacer_fin(fin);
   effacer_enemy(boss);
 

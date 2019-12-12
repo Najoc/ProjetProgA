@@ -83,7 +83,28 @@ void dessiner_attaque_sur_sprite(Attaque* a, SDL_Renderer* renderer, Sprite* s, 
     SDL_RenderCopy(renderer, a->Frame, &SrcR, &DestR);
 }
 
+void dessiner_surb_attaque(Attaque* a, SDL_Renderer* renderer, SDL_Texture* surb, int taille){
+	SDL_Rect SrcR;
+	SDL_Rect DestR;
+	
+	for(int j = 0; j < taille; j++){
+		SrcR.x = 0;
+		SrcR.y = 0;
+		SrcR.w = TILE_WIDTH/2;
+		SrcR.h = TILE_HEIGHT/2;
 
+		int RenderXatk = a->zone[j].x;
+		int RenderYatk = a->zone[j].y;
+		iso_to_coord(&RenderXatk, &RenderYatk);
+
+		DestR.x = RenderXatk - TILE_WIDTH/2;
+		DestR.y = RenderYatk;
+		DestR.w = TILE_WIDTH;
+		DestR.h = TILE_HEIGHT;
+			
+		SDL_RenderCopy(renderer, surb, &SrcR, &DestR);
+    }
+}
 
 void effacer_attaque(Attaque* a){
 	SDL_DestroyTexture(a->Frame); a->Frame = NULL;

@@ -64,6 +64,13 @@ int collisions_competence(int mouseX, int mouseY, Sprite* s, int longueur, int n
 	return 0;
 }
 
+int collisions_souris_aide(int mouseX, int mouseY){
+	if(collisions_point_rect(mouseX, mouseY, 0, 0, TILE_HEIGHT, TILE_HEIGHT))
+		return 1;
+	else
+		return 0;
+}
+
 
 
 

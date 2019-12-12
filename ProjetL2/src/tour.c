@@ -11,5 +11,4 @@ void tour_ennemi(Enemy* e, Sprite** tab){
     if(e->pattern > 6)
 	e->pattern = 0;
     jouer_pattern(e, tab, 0);
-    e->pattern++;
 }
