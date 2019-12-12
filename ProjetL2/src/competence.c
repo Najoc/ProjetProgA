@@ -47,11 +47,15 @@ Competence* ajouter_comp_deplacement(int spriteX, int spriteY, SDL_Renderer* ren
 	break;
 
         case 1:
-	t = malloc(sizeof(Tile)*4);
+	t = malloc(sizeof(Tile)*8);
         t[0].x = spriteX - 1; t[0].y = spriteY;
         t[1].x = spriteX + 1; t[1].y = spriteY;
         t[2].x = spriteX; t[2].y = spriteY - 1;
         t[3].x = spriteX; t[3].y = spriteY + 1;
+	t[4].x = spriteX + 2; t[4].y = spriteY - 2;
+        t[5].x = spriteX + 2; t[5].y = spriteY + 2;
+	t[6].x = spriteX - 2; t[6].y = spriteY - 2;
+        t[7].x = spriteX - 2; t[7].y = spriteY + 2;
 	break;
 
 	case 2:

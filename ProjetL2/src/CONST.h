@@ -11,6 +11,10 @@
 
 #define TITLE_HEIGHT 50
 
+#define PLAY_X 300
+
+#define PLAY_Y SCREEN_HEIGHT - 70
+
 #define PLAY_WIDTH 200
 
 #define PLAY_HEIGHT 40

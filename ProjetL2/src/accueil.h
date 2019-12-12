@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include "fonctions_SDL.h"
 #include "CONST.h"
-
+#include "collisions.h"
 
 typedef struct{
     SDL_Texture* fond;
@@ -20,9 +20,7 @@ typedef struct{
 
 extern Accueil* init_accueil(SDL_Renderer* renderer);
 
-extern void affichage_accueil (SDL_Renderer* renderer, Accueil* a, int *mouseX, int *mouseY);
-int collision_play(int mouseX, int mouseY);
-int collision_quit(int mouseX, int mouseY);
+extern void affichage_accueil (SDL_Renderer* renderer, Accueil* a, int mouseX, int mouseY);
 extern void renderElement(SDL_Renderer* renderer, SDL_Texture* image, int SrcX, int SrcY, int SrcW, int SrcH, int DestX, int DestY, int DestW, int destH);
 extern void detruire_accueil(Accueil* a);
 

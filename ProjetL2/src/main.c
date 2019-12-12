@@ -126,9 +126,6 @@ int main(){
   //initialisation de l'entier déterminant l'écran à afficher
   int screen = 1;
 
-  //initialisation accueil
-  world->accueil = init_accueil(ecran);
-
   SDL_Texture* brillant = charger_image_transparente("images/surbrillance.bmp", ecran, 0, 255,255);
 
   //ecran fin
@@ -153,7 +150,7 @@ int main(){
 
             case 1:
             SDL_RenderClear(ecran);
-            affichage_accueil(ecran, world->accueil, &mouseX, &mouseY);
+            affichage_accueil(ecran, world->accueil, mousecoordX, mousecoordY);
             screen = screenskip(evenements, world->accueil);
             SDL_RenderPresent(ecran);
             break;
@@ -167,11 +164,7 @@ int main(){
 
             dessiner_surbrillance(ecran, brillant, mouseX, mouseY);
             if(draw_surb == 1){
-              if(perso == 1){
-                dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 4, mouseX, mouseY);
-              }else{
                 dessiner_comp_sur_tile(world->tabSprites[perso]->comp[0], ecran, 8, mouseX, mouseY);
-              }
             }
             if(draw_surb == 2)
               dessiner_comp_sur_tile(world->tabSprites[perso]->comp[1], ecran, 25, mouseX, mouseY);
@@ -190,7 +183,7 @@ int main(){
                 nbrframe++;
               }
             }
-            printf("%d,%d\n", mouseX, mouseY);
+            //printf("%d,%d\n", mouseX, mouseY);
 
             for(int i = 0; i<15; i++){
               dessiner_sprite(ecran, world->tabSprites[i], -TILE_WIDTH/8, -TILE_HEIGHT/2);
@@ -262,7 +255,7 @@ int main(){
 				gestion_competence_deplacement(ecran, world->tabSprites[perso], mouseX,mouseY,-TILE_WIDTH/8,-TILE_HEIGHT/2, perso);
 				draw_surb = 0;
 			    }
-			    if(draw_surb == 2 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 24, 1)){
+			    if(draw_surb == 2 && collisions_competence(mouseX, mouseY, world->tabSprites[perso], 25, 1)){
 				gestion_competence_attaque(world->tabSprites[perso], boss, mouseX,mouseY);
 				draw_surb = 0;
 			    }
@@ -280,8 +273,24 @@ int main(){
 		    break;
                 case SDL_KEYDOWN:
                 switch(evenements.key.keysym.sym) {
+		    case SDLK_1:
+			compdraw = 0; break;
+		    case SDLK_2:
+			compdraw = 1; break;
+		    case SDLK_3:
+			compdraw = 2; break;
+		    case SDLK_4:
+			compdraw = 3; break;
+		    case SDLK_d:
+			if(compdraw >= 0)
+			    perso = compdraw;
+			draw_surb = 1; break;
+	            case SDLK_a:
+			if(compdraw >= 0)
+			    perso = compdraw;
+			draw_surb = 2; break;			
                     case SDLK_ESCAPE:
-                    case SDLK_q:
+                    case SDLK_p:
                     terminer = true; break;
                     case SDLK_n:
 			world->tabSprites[15]->vie -= 50;

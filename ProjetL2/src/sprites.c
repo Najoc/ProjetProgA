@@ -61,10 +61,6 @@ void DetruireSprites(Sprite* s){
     SDL_DestroyTexture(s->asset); s->asset = NULL;
 	free(s->lifebar); s->lifebar = NULL;
 	free(s->jaugePA); s->jaugePA = NULL;
-	for(int i = 0; i<2; i++){
-		desallouer_comp(s->comp[i]);
-	}
-	free(s->comp); s->comp = NULL;
 	free(s); s = NULL;
 }
 

@@ -37,7 +37,7 @@ void jouer_pattern(Enemy* e, Sprite** tab, int cible){
 }
 
 void gestion_competence_attaque(Sprite* s, Enemy* e, int mouseX, int mouseY){
-    if(mouseX >= s->comp[1]->zonePossible[0].x && mouseY >= s->comp[1]->zonePossible[0].y && mouseX <= s->comp[1]->zonePossible[24].x && mouseY <= s->comp[1]->zonePossible[24].x){
+    if(mouseX >= s->comp[1]->zonePossible[0].x && mouseY >= s->comp[1]->zonePossible[0].y && mouseX <= s->comp[1]->zonePossible[24].x && mouseY <= s->comp[1]->zonePossible[24].y){
 	if(e->sp->x == mouseX && e->sp->y == mouseY){
 	    if(e->sp->vie - 50 < 0){
 		e->sp->vie = 0;
